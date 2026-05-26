@@ -3,32 +3,29 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="A private deluxe tracker for all 151 Kanto shiny Pokemon with persistent checklist progress." />
-  <meta name="theme-color" content="#080a18" />
-  <title>Kanto Shiny Checklist · Deluxe Tracker</title>
+  <meta name="description" content="A Poketwo collection companion for caught, missing, shiny, wishlist, event-form, and command tracking." />
+  <meta name="theme-color" content="#07111c" />
+  <title>Pokétwo Collection Command Center</title>
   <style>
     :root {
-      --bg: #080a18;
-      --bg-2: #10152d;
-      --panel: rgba(17, 23, 47, 0.78);
-      --panel-2: rgba(29, 36, 77, 0.86);
-      --glass: rgba(255, 255, 255, 0.08);
-      --text: #f7f8ff;
-      --muted: #b5bde8;
-      --soft: #7f8dca;
-      --accent: #69e4ff;
-      --accent-2: #c68cff;
-      --accent-3: #ffe66d;
-      --good: #8af0bb;
-      --warn: #ffd36b;
-      --danger: #ff7b9a;
-      --border: rgba(136, 153, 255, 0.22);
-      --border-strong: rgba(169, 228, 255, 0.42);
-      --shadow: 0 24px 70px rgba(0, 0, 0, 0.38);
-      --radius-xl: 30px;
-      --radius-lg: 22px;
-      --radius-md: 16px;
-      --ring-size: 126px;
+      --bg: #07111c;
+      --bg-2: #102033;
+      --panel: rgba(14, 25, 41, 0.84);
+      --panel-strong: rgba(21, 35, 56, 0.94);
+      --text: #f8fbff;
+      --muted: #b6c5d8;
+      --soft: #7f93aa;
+      --cyan: #6ee7ff;
+      --mint: #8af0bb;
+      --gold: #ffe070;
+      --rose: #ff89aa;
+      --violet: #caa1ff;
+      --border: rgba(148, 190, 226, 0.22);
+      --border-strong: rgba(134, 231, 255, 0.44);
+      --shadow: 0 24px 70px rgba(0, 0, 0, 0.42);
+      --radius-xl: 26px;
+      --radius-lg: 18px;
+      --radius-md: 12px;
     }
 
     * { box-sizing: border-box; }
@@ -37,228 +34,232 @@
 
     body {
       margin: 0;
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, Helvetica, sans-serif;
-      color: var(--text);
       min-height: 100vh;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+      color: var(--text);
       background:
-        radial-gradient(circle at 12% 8%, rgba(105, 228, 255, 0.28), transparent 28rem),
-        radial-gradient(circle at 82% 4%, rgba(198, 140, 255, 0.28), transparent 26rem),
-        radial-gradient(circle at 65% 88%, rgba(255, 230, 109, 0.15), transparent 28rem),
-        linear-gradient(180deg, #070914 0%, var(--bg) 48%, #0d1021 100%);
+        radial-gradient(circle at 12% 6%, rgba(110, 231, 255, 0.24), transparent 25rem),
+        radial-gradient(circle at 80% 0%, rgba(255, 224, 112, 0.18), transparent 24rem),
+        radial-gradient(circle at 52% 98%, rgba(255, 137, 170, 0.15), transparent 28rem),
+        linear-gradient(180deg, #06101c 0%, var(--bg) 54%, #09131f 100%);
       overflow-x: hidden;
     }
 
-    body::before,
-    body::after {
+    body::before {
       content: "";
       position: fixed;
       inset: 0;
-      pointer-events: none;
       z-index: -1;
-    }
-
-    body::before {
-      background-image:
-        radial-gradient(circle, rgba(255, 255, 255, 0.24) 0 1px, transparent 1.6px),
-        radial-gradient(circle, rgba(105, 228, 255, 0.2) 0 1px, transparent 1.8px);
-      background-size: 72px 72px, 110px 110px;
-      background-position: 0 0, 22px 44px;
-      mask-image: linear-gradient(to bottom, rgba(0,0,0,0.9), rgba(0,0,0,0.15));
+      pointer-events: none;
       opacity: 0.55;
-    }
-
-    body::after {
-      background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.03), transparent);
-      transform: translateX(-70%);
-      animation: auroraSweep 14s linear infinite;
-    }
-
-    @keyframes auroraSweep {
-      to { transform: translateX(70%); }
+      background-image:
+        radial-gradient(circle, rgba(255,255,255,0.18) 0 1px, transparent 1.6px),
+        linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 88px 88px, 42px 42px, 42px 42px;
+      mask-image: linear-gradient(to bottom, rgba(0,0,0,0.92), rgba(0,0,0,0.18));
     }
 
     .wrap {
-      max-width: 1320px;
+      width: min(1440px, 100%);
       margin: 0 auto;
-      padding: 28px;
+      padding: 24px;
     }
 
-    .hero, .panel, .card, .stat, .spotlight-card, .mini-card {
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
+    .hero,
+    .panel,
+    .species-card,
+    .stat,
+    .custom-card {
       border: 1px solid var(--border);
       box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
     }
 
     .hero {
-      position: relative;
       display: grid;
-      grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr);
-      gap: 24px;
+      grid-template-columns: minmax(0, 1.2fr) minmax(320px, 0.8fr);
+      gap: 18px;
       align-items: stretch;
+      padding: 22px;
+      margin-bottom: 16px;
       border-radius: var(--radius-xl);
       background:
-        linear-gradient(135deg, rgba(16, 23, 54, 0.88), rgba(22, 14, 46, 0.82)),
-        radial-gradient(circle at 15% 15%, rgba(105, 228, 255, 0.2), transparent 28rem);
-      padding: 26px;
+        linear-gradient(135deg, rgba(15, 31, 51, 0.9), rgba(23, 23, 48, 0.86)),
+        radial-gradient(circle at 14% 18%, rgba(110, 231, 255, 0.18), transparent 24rem);
       overflow: hidden;
-      margin-bottom: 18px;
+      position: relative;
     }
 
-    .hero::before {
+    .hero::after {
       content: "";
       position: absolute;
-      width: 360px;
-      height: 360px;
+      width: 320px;
+      height: 320px;
       right: -120px;
-      top: -120px;
+      top: -130px;
       border-radius: 999px;
-      background: radial-gradient(circle, rgba(255, 230, 109, 0.28), transparent 66%);
-      filter: blur(2px);
-      animation: pulseGlow 4.8s ease-in-out infinite alternate;
+      background: radial-gradient(circle, rgba(255, 224, 112, 0.28), transparent 66%);
+      pointer-events: none;
     }
 
-    @keyframes pulseGlow {
-      from { transform: scale(0.95); opacity: 0.58; }
-      to { transform: scale(1.08); opacity: 1; }
-    }
-
-    .hero-main, .hero-art {
+    .hero-main,
+    .hero-side {
       position: relative;
       z-index: 1;
     }
 
     .eyebrow {
+      width: fit-content;
       display: inline-flex;
       align-items: center;
-      gap: 10px;
-      width: fit-content;
-      padding: 8px 12px;
+      gap: 8px;
+      padding: 8px 11px;
       border-radius: 999px;
-      color: #dff8ff;
-      background: rgba(105, 228, 255, 0.11);
-      border: 1px solid rgba(105, 228, 255, 0.28);
-      font-size: 0.78rem;
-      font-weight: 800;
-      letter-spacing: 0.12em;
+      background: rgba(110, 231, 255, 0.1);
+      color: #dcf8ff;
+      border: 1px solid rgba(110, 231, 255, 0.32);
+      font-size: 0.76rem;
+      font-weight: 900;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
     }
 
     .eyebrow::before {
       content: "✦";
-      color: var(--accent-3);
-      text-shadow: 0 0 18px rgba(255, 230, 109, 0.8);
+      color: var(--gold);
+      text-shadow: 0 0 18px rgba(255, 224, 112, 0.78);
     }
 
     h1 {
-      margin: 18px 0 10px;
-      font-size: clamp(2.35rem, 6vw, 5.5rem);
-      line-height: 0.9;
-      letter-spacing: -0.075em;
+      margin: 15px 0 10px;
+      font-size: clamp(2.2rem, 5vw, 5.2rem);
+      line-height: 0.92;
+      letter-spacing: -0.07em;
     }
 
     .gradient-text {
-      background: linear-gradient(92deg, #ffffff 4%, #86efff 35%, #caa1ff 72%, #ffe777 100%);
+      color: transparent;
+      background: linear-gradient(92deg, #ffffff 6%, #80efff 34%, #ffe070 64%, #ff9cb8 100%);
       -webkit-background-clip: text;
       background-clip: text;
-      color: transparent;
-      text-shadow: 0 12px 70px rgba(105, 228, 255, 0.2);
     }
 
     p {
       color: var(--muted);
       line-height: 1.6;
-      margin: 9px 0;
-      max-width: 72ch;
+      margin: 8px 0;
+      max-width: 78ch;
     }
 
-    .hero-copy {
-      font-size: 1.02rem;
-    }
-
-    .summary-strip {
+    .top-actions {
       display: flex;
       flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(120px, 1fr));
       gap: 10px;
       margin-top: 18px;
     }
 
-    .chip {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      border: 1px solid var(--border);
-      border-radius: 999px;
-      padding: 8px 12px;
-      color: #e7ecff;
-      background: rgba(255, 255, 255, 0.06);
-      font-size: 0.88rem;
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
-    }
-
-    .chip strong { color: #fff; }
-
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 12px;
-      margin-top: 22px;
-    }
-
     .stat {
-      position: relative;
-      overflow: hidden;
-      background: linear-gradient(180deg, rgba(255,255,255,0.09), rgba(255,255,255,0.045));
+      min-height: 96px;
+      padding: 14px;
       border-radius: var(--radius-lg);
-      padding: 16px;
-      min-height: 104px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.09), rgba(255,255,255,0.04));
+      overflow: hidden;
     }
-
-    .stat::before {
-      content: "";
-      position: absolute;
-      inset: -1px;
-      background: linear-gradient(120deg, transparent, rgba(255,255,255,0.12), transparent);
-      transform: translateX(-110%);
-      transition: transform 0.75s ease;
-    }
-
-    .stat:hover::before { transform: translateX(110%); }
 
     .stat .label {
       color: var(--soft);
-      font-size: 0.78rem;
-      letter-spacing: 0.08em;
+      font-size: 0.72rem;
+      font-weight: 950;
+      letter-spacing: 0.09em;
       text-transform: uppercase;
-      font-weight: 800;
       margin-bottom: 8px;
     }
 
     .stat .value {
-      font-size: clamp(1.45rem, 2vw, 2.05rem);
-      font-weight: 900;
-      font-variant-numeric: tabular-nums;
+      font-weight: 950;
+      font-size: clamp(1.35rem, 2.4vw, 2rem);
       letter-spacing: -0.04em;
+      font-variant-numeric: tabular-nums;
     }
 
     .stat .sub {
-      margin-top: 6px;
+      margin-top: 5px;
       color: var(--muted);
-      font-size: 0.82rem;
+      font-size: 0.8rem;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
 
+    .hero-side {
+      display: grid;
+      gap: 14px;
+      align-content: stretch;
+    }
+
+    .target-panel {
+      min-height: 100%;
+      border-radius: var(--radius-lg);
+      border: 1px solid rgba(255,255,255,0.12);
+      background:
+        radial-gradient(circle at 50% 16%, rgba(255, 224, 112, 0.2), transparent 15rem),
+        linear-gradient(180deg, rgba(255,255,255,0.09), rgba(255,255,255,0.04));
+      padding: 16px;
+      display: grid;
+      grid-template-columns: 126px 1fr;
+      gap: 14px;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    .target-art {
+      width: 126px;
+      height: 126px;
+      border-radius: 24px;
+      display: grid;
+      place-items: center;
+      background: rgba(0,0,0,0.18);
+      border: 1px solid rgba(255,255,255,0.12);
+    }
+
+    .target-art img {
+      width: 132px;
+      height: 132px;
+      object-fit: contain;
+      image-rendering: auto;
+      filter: drop-shadow(0 18px 18px rgba(0,0,0,0.28));
+    }
+
+    .target-name {
+      font-size: 1.4rem;
+      font-weight: 950;
+      letter-spacing: -0.035em;
+    }
+
+    .target-meta {
+      margin-top: 5px;
+      color: var(--muted);
+      line-height: 1.45;
+      font-size: 0.92rem;
+    }
+
     .progress-shell {
-      position: relative;
-      margin-top: 18px;
-      height: 18px;
+      height: 16px;
       border-radius: 999px;
       overflow: hidden;
+      margin-top: 14px;
       border: 1px solid var(--border-strong);
-      background: rgba(6, 9, 29, 0.72);
-      box-shadow: inset 0 0 20px rgba(0,0,0,0.38), 0 0 30px rgba(105, 228, 255, 0.11);
+      background: rgba(3, 10, 18, 0.7);
+      box-shadow: inset 0 0 22px rgba(0,0,0,0.36);
     }
 
     .progress-bar {
@@ -266,514 +267,387 @@
       width: 0%;
       border-radius: inherit;
       background:
-        linear-gradient(90deg, rgba(255,255,255,0.34), transparent 30%),
-        linear-gradient(90deg, var(--accent), var(--accent-2) 62%, var(--accent-3));
-      box-shadow: 0 0 26px rgba(105, 228, 255, 0.55);
-      transition: width 0.35s cubic-bezier(.22,.8,.34,1);
-    }
-
-    .hero-art {
-      min-height: 400px;
-      border-radius: var(--radius-lg);
-      background:
-        radial-gradient(circle at 50% 50%, rgba(255, 230, 109, 0.18), transparent 17rem),
-        linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.035));
-      border: 1px solid rgba(255,255,255,0.12);
-      overflow: hidden;
-      display: grid;
-      place-items: center;
-    }
-
-    .pokeball-orbit {
-      position: absolute;
-      width: min(78vw, 420px);
-      aspect-ratio: 1;
-      border-radius: 999px;
-      border: 1px dashed rgba(255,255,255,0.18);
-      animation: spin 26s linear infinite;
-    }
-
-    .pokeball-orbit::before,
-    .pokeball-orbit::after {
-      content: "";
-      position: absolute;
-      width: 18px;
-      height: 18px;
-      border-radius: 999px;
-      background: linear-gradient(135deg, #fff, var(--accent));
-      box-shadow: 0 0 18px rgba(105, 228, 255, 0.85);
-    }
-
-    .pokeball-orbit::before { top: 22px; left: 48%; }
-    .pokeball-orbit::after { bottom: 40px; right: 15%; background: linear-gradient(135deg, #fff, var(--accent-3)); }
-
-    @keyframes spin { to { transform: rotate(360deg); } }
-
-    .featured-sprite {
-      width: min(84%, 420px);
-      filter: drop-shadow(0 32px 35px rgba(0,0,0,0.35)) drop-shadow(0 0 46px rgba(255, 230, 109, 0.22));
-      transform-origin: 50% 80%;
-      animation: floaty 4.3s ease-in-out infinite;
-      z-index: 2;
-    }
-
-    @keyframes floaty {
-      0%,100% { transform: translateY(0) rotate(-2deg); }
-      50% { transform: translateY(-14px) rotate(2deg); }
-    }
-
-    .sprite-cloud {
-      position: absolute;
-      inset: auto 14px 14px 14px;
-      display: flex;
-      gap: 10px;
-      justify-content: center;
-      flex-wrap: wrap;
-      z-index: 3;
-    }
-
-    .sprite-cloud img {
-      width: 62px;
-      height: 62px;
-      object-fit: contain;
-      padding: 8px;
-      border-radius: 18px;
-      background: rgba(0,0,0,0.22);
-      border: 1px solid rgba(255,255,255,0.13);
-      box-shadow: 0 12px 24px rgba(0,0,0,0.2);
-      animation: bob 3.2s ease-in-out infinite;
-    }
-
-    .sprite-cloud img:nth-child(2n) { animation-delay: -1s; }
-    .sprite-cloud img:nth-child(3n) { animation-delay: -1.8s; }
-
-    @keyframes bob {
-      0%,100% { transform: translateY(0); }
-      50% { transform: translateY(-7px); }
-    }
-
-    .dashboard-grid {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) 330px;
-      gap: 18px;
-      align-items: start;
+        linear-gradient(90deg, rgba(255,255,255,0.32), transparent 32%),
+        linear-gradient(90deg, var(--cyan), var(--mint) 45%, var(--gold) 72%, var(--rose));
+      transition: width 0.35s ease;
     }
 
     .panel {
-      background: var(--panel);
       border-radius: var(--radius-lg);
-      box-shadow: var(--shadow);
+      background: var(--panel);
     }
 
-    .controls {
-      position: sticky;
-      top: 12px;
-      z-index: 5;
+    .toolbar {
       display: grid;
-      grid-template-columns: minmax(240px, 1.15fr) 0.74fr 0.86fr repeat(4, auto);
+      grid-template-columns: minmax(180px, 1fr) 150px 150px 150px 150px;
       gap: 10px;
       padding: 14px;
-      margin-bottom: 18px;
-      align-items: center;
+      margin-bottom: 16px;
+      position: sticky;
+      top: 10px;
+      z-index: 4;
     }
 
-    input[type="search"], select, button {
+    input,
+    select,
+    textarea,
+    button {
       width: 100%;
-      min-height: 46px;
-      border-radius: 14px;
+      min-height: 44px;
       border: 1px solid var(--border);
-      background: rgba(5, 9, 27, 0.72);
+      border-radius: var(--radius-md);
+      background: rgba(4, 12, 22, 0.76);
       color: var(--text);
-      padding: 12px 14px;
       font: inherit;
+      padding: 11px 12px;
       outline: none;
       box-shadow: inset 0 1px 0 rgba(255,255,255,0.06);
     }
 
-    input[type="search"]:focus, select:focus, button:focus-visible {
-      border-color: rgba(105, 228, 255, 0.62);
-      box-shadow: 0 0 0 4px rgba(105, 228, 255, 0.12), inset 0 1px 0 rgba(255,255,255,0.08);
+    textarea {
+      min-height: 164px;
+      resize: vertical;
+      line-height: 1.45;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus,
+    button:focus-visible {
+      border-color: rgba(110, 231, 255, 0.68);
+      box-shadow: 0 0 0 4px rgba(110, 231, 255, 0.12), inset 0 1px 0 rgba(255,255,255,0.07);
     }
 
     button {
       cursor: pointer;
-      background:
-        linear-gradient(180deg, rgba(255,255,255,0.1), rgba(255,255,255,0.02)),
-        linear-gradient(135deg, rgba(105, 228, 255, 0.14), rgba(198, 140, 255, 0.14));
-      transition: transform 0.12s ease, opacity 0.2s ease, border-color 0.2s ease;
+      font-weight: 850;
       white-space: nowrap;
-      font-weight: 800;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.09), rgba(255,255,255,0.025)),
+        linear-gradient(135deg, rgba(110, 231, 255, 0.13), rgba(255, 224, 112, 0.08));
+      transition: transform 0.12s ease, border-color 0.16s ease, opacity 0.16s ease;
     }
 
     button:hover { transform: translateY(-1px); border-color: var(--border-strong); }
     button:active { transform: translateY(1px); }
+    button:disabled { opacity: 0.48; cursor: not-allowed; transform: none; }
 
     .primary-btn {
-      background: linear-gradient(135deg, rgba(105, 228, 255, 0.22), rgba(198, 140, 255, 0.18));
+      background: linear-gradient(135deg, rgba(110, 231, 255, 0.25), rgba(138, 240, 187, 0.16));
     }
 
-    .danger-btn { color: #ffe5ec; }
-
-    .quick-panel {
-      padding: 18px;
-      display: grid;
-      gap: 14px;
-      margin-bottom: 18px;
+    .danger-btn {
+      color: #ffe4eb;
+      background: linear-gradient(135deg, rgba(255, 137, 170, 0.2), rgba(255, 224, 112, 0.06));
     }
 
-    .ring-card {
+    .layout {
       display: grid;
-      grid-template-columns: var(--ring-size) 1fr;
+      grid-template-columns: minmax(0, 1fr) 370px;
       gap: 16px;
-      align-items: center;
+      align-items: start;
     }
 
-    .progress-ring {
-      width: var(--ring-size);
-      height: var(--ring-size);
-      position: relative;
-      display: grid;
-      place-items: center;
+    .tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 10px;
+      margin-bottom: 16px;
     }
 
-    .progress-ring svg {
-      width: var(--ring-size);
-      height: var(--ring-size);
-      transform: rotate(-90deg);
-      filter: drop-shadow(0 0 18px rgba(105,228,255,0.2));
-    }
-
-    .progress-ring circle {
-      fill: none;
-      stroke-width: 10;
-      stroke-linecap: round;
-    }
-
-    .progress-ring .track { stroke: rgba(255,255,255,0.09); }
-    .progress-ring .meter {
-      stroke: url(#ringGradient);
-      stroke-dasharray: 314;
-      stroke-dashoffset: 314;
-      transition: stroke-dashoffset 0.45s cubic-bezier(.22,.8,.34,1);
-    }
-
-    .ring-value {
-      position: absolute;
-      text-align: center;
-      font-weight: 950;
-      font-size: 1.25rem;
-      letter-spacing: -0.04em;
-    }
-
-    .ring-value span {
-      display: block;
-      font-size: 0.64rem;
-      color: var(--muted);
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      margin-top: 3px;
-    }
-
-    .sidebar-title {
-      margin: 0 0 4px;
-      font-size: 0.88rem;
-      color: #fff;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-
-    .hunt-target {
-      display: grid;
-      grid-template-columns: 72px 1fr;
-      gap: 12px;
-      align-items: center;
-      padding: 12px;
-      border-radius: 18px;
-      background: rgba(255,255,255,0.055);
-      border: 1px solid rgba(255,255,255,0.09);
-    }
-
-    .hunt-target img {
-      width: 72px;
-      height: 72px;
-      object-fit: contain;
-      filter: drop-shadow(0 10px 14px rgba(0,0,0,0.25));
-    }
-
-    .target-name { font-weight: 950; font-size: 1.05rem; }
-    .target-meta { color: var(--muted); font-size: 0.85rem; margin-top: 3px; }
-
-    .quick-actions {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 10px;
-    }
-
-    .mini-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 10px;
-    }
-
-    .mini-card {
-      border-radius: 18px;
-      background: rgba(255,255,255,0.055);
-      padding: 12px;
-    }
-
-    .mini-card .label {
-      color: var(--soft);
-      font-size: 0.72rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      font-weight: 900;
-    }
-
-    .mini-card .value {
-      margin-top: 5px;
-      color: #fff;
-      font-weight: 950;
-      font-size: 1.18rem;
-      font-variant-numeric: tabular-nums;
-    }
-
-    .list {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
-      gap: 14px;
-    }
-
-    .card {
-      --tilt-x: 0deg;
-      --tilt-y: 0deg;
-      position: relative;
-      isolation: isolate;
-      min-height: 132px;
-      display: grid;
-      grid-template-columns: 34px 92px minmax(0, 1fr) auto;
-      align-items: center;
-      gap: 12px;
-      padding: 14px;
-      border-radius: 24px;
-      background:
-        linear-gradient(160deg, rgba(255,255,255,0.085), rgba(255,255,255,0.035)),
-        rgba(18, 22, 45, 0.76);
-      transform: perspective(900px) rotateX(var(--tilt-x)) rotateY(var(--tilt-y));
-      transition: transform 0.18s ease, border-color 0.22s ease, box-shadow 0.22s ease, background 0.22s ease;
-      overflow: hidden;
-      cursor: pointer;
-      user-select: none;
-    }
-
-    .card::before {
-      content: "";
-      position: absolute;
-      inset: -1px;
-      border-radius: inherit;
-      background: radial-gradient(circle at var(--shine-x, 50%) var(--shine-y, 50%), rgba(255,255,255,0.18), transparent 34%);
-      opacity: 0;
-      transition: opacity 0.2s ease;
-      z-index: -1;
-    }
-
-    .card::after {
-      content: "";
-      position: absolute;
-      right: -38px;
-      top: -36px;
-      width: 130px;
-      height: 130px;
+    .tab-btn {
+      width: auto;
+      min-height: 40px;
+      padding: 9px 12px;
       border-radius: 999px;
-      background: radial-gradient(circle, rgba(105, 228, 255, 0.11), transparent 62%);
-      opacity: 0.8;
-      z-index: -2;
+      color: var(--muted);
     }
 
-    .card:hover {
-      border-color: rgba(105, 228, 255, 0.5);
-      box-shadow: 0 26px 70px rgba(0,0,0,0.42), 0 0 0 1px rgba(105, 228, 255, 0.12) inset;
+    .tab-btn.active {
+      color: #06111c;
+      background: linear-gradient(135deg, var(--cyan), var(--mint));
+      border-color: transparent;
     }
 
-    .card:hover::before { opacity: 1; }
+    .view { display: none; }
+    .view.active { display: block; }
 
-    .card.owned {
-      border-color: rgba(138, 240, 187, 0.42);
+    .species-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(318px, 1fr));
+      gap: 12px;
+    }
+
+    .species-card {
+      min-height: 168px;
+      border-radius: var(--radius-lg);
       background:
-        linear-gradient(160deg, rgba(138, 240, 187, 0.14), rgba(105, 228, 255, 0.04)),
-        rgba(16, 32, 35, 0.82);
+        linear-gradient(145deg, rgba(255,255,255,0.075), rgba(255,255,255,0.035)),
+        rgba(13, 23, 38, 0.86);
+      padding: 13px;
+      display: grid;
+      grid-template-columns: 88px minmax(0, 1fr);
+      gap: 12px;
+      overflow: hidden;
+      position: relative;
     }
 
-    .card.highlight {
-      animation: targetPulse 1.7s ease-in-out 2;
+    .species-card::after {
+      content: "";
+      position: absolute;
+      inset: auto -38px -54px auto;
+      width: 140px;
+      height: 140px;
+      border-radius: 999px;
+      background: radial-gradient(circle, rgba(110, 231, 255, 0.12), transparent 65%);
+      pointer-events: none;
     }
 
-    @keyframes targetPulse {
-      0%,100% { box-shadow: 0 0 0 0 rgba(255,230,109,0); border-color: var(--border); }
-      50% { box-shadow: 0 0 0 7px rgba(255,230,109,0.18), 0 0 44px rgba(255,230,109,0.3); border-color: rgba(255,230,109,0.78); }
+    .species-card.caught {
+      border-color: rgba(138, 240, 187, 0.44);
+      background:
+        linear-gradient(145deg, rgba(138, 240, 187, 0.13), rgba(110, 231, 255, 0.04)),
+        rgba(11, 31, 32, 0.86);
     }
 
-    .checkbox {
-      width: 24px;
-      height: 24px;
-      accent-color: #7dd3fc;
-      flex: 0 0 auto;
-      cursor: pointer;
+    .species-card.shiny {
+      border-color: rgba(255, 224, 112, 0.55);
     }
 
-    .art-shell {
-      width: 92px;
-      height: 92px;
-      border-radius: 22px;
+    .sprite-box {
+      width: 88px;
+      height: 88px;
+      border-radius: 20px;
       display: grid;
       place-items: center;
       background:
-        radial-gradient(circle at 50% 45%, rgba(255,255,255,0.16), transparent 54%),
+        radial-gradient(circle at 50% 44%, rgba(255,255,255,0.16), transparent 56%),
         linear-gradient(180deg, rgba(255,255,255,0.1), rgba(255,255,255,0.035));
       border: 1px solid rgba(255,255,255,0.1);
       overflow: hidden;
     }
 
-    .sprite {
-      width: 104px;
-      height: 104px;
+    .sprite-box img {
+      width: 98px;
+      height: 98px;
       object-fit: contain;
-      filter: grayscale(1) saturate(0.65) opacity(0.72) drop-shadow(0 14px 13px rgba(0,0,0,0.24));
-      transform: scale(0.9);
-      transition: filter 0.22s ease, transform 0.22s ease;
+      image-rendering: auto;
+      filter: grayscale(1) opacity(0.64) drop-shadow(0 12px 12px rgba(0,0,0,0.24));
     }
 
-    .card.owned .sprite,
-    .card:hover .sprite {
-      filter: drop-shadow(0 16px 18px rgba(0,0,0,0.25)) drop-shadow(0 0 18px rgba(255,230,109,0.15));
-      transform: scale(1.02) translateY(-2px);
+    .species-card.caught .sprite-box img,
+    .species-card.shiny .sprite-box img {
+      filter: drop-shadow(0 14px 15px rgba(0,0,0,0.26));
     }
 
     .dex {
-      color: var(--accent);
-      font-weight: 950;
-      font-size: 0.9rem;
-      font-variant-numeric: tabular-nums;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-    }
-
-    .name-wrap {
-      min-width: 0;
-    }
-
-    .name-row {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      min-width: 0;
-    }
-
-    .name {
-      font-weight: 950;
-      font-size: 1.08rem;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-
-    .sparkle {
-      color: var(--accent-3);
-      text-shadow: 0 0 16px rgba(255,230,109,0.7);
-      opacity: 0.4;
-    }
-
-    .card.owned .sparkle { opacity: 1; }
-
-    .meta {
-      color: var(--muted);
-      font-size: 0.88rem;
-      margin-top: 5px;
-    }
-
-    .badge {
-      display: inline-flex;
-      justify-content: center;
-      align-items: center;
-      min-width: 76px;
-      padding: 8px 10px;
-      border-radius: 999px;
+      color: var(--cyan);
       font-size: 0.78rem;
       font-weight: 950;
-      border: 1px solid transparent;
-      letter-spacing: 0.02em;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
+      font-variant-numeric: tabular-nums;
     }
 
-    .badge.owned {
-      background: rgba(138, 240, 187, 0.14);
-      color: var(--good);
-      border-color: rgba(138, 240, 187, 0.38);
+    .species-name {
+      margin-top: 3px;
+      font-size: 1.08rem;
+      font-weight: 950;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
-    .badge.missing {
-      background: rgba(255, 211, 107, 0.11);
-      color: var(--warn);
-      border-color: rgba(255, 211, 107, 0.28);
-    }
-
-    .empty-state {
-      grid-column: 1 / -1;
-      padding: 40px;
-      text-align: center;
-      border-radius: var(--radius-lg);
+    .species-meta {
       color: var(--muted);
-      background: rgba(255,255,255,0.05);
-      border: 1px dashed var(--border);
+      margin-top: 4px;
+      font-size: 0.83rem;
     }
 
-    .notes {
-      margin-top: 18px;
-      padding: 18px;
-    }
-
-    .notes strong {
-      display: inline-flex;
-      margin-bottom: 6px;
-      font-size: 0.95rem;
-    }
-
-    .notes ul {
-      margin: 8px 0 0 18px;
-      color: var(--muted);
-      line-height: 1.55;
-    }
-
-    .tiny {
-      color: var(--muted);
-      font-size: 0.86rem;
+    .card-checks {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 7px;
       margin-top: 10px;
     }
 
-    .footer {
+    .check-pill {
+      min-height: 34px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.045);
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      justify-content: center;
+      color: var(--muted);
+      font-size: 0.78rem;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .check-pill input {
+      width: 16px;
+      height: 16px;
+      min-height: 0;
+      padding: 0;
+      accent-color: #69e4ff;
+      box-shadow: none;
+    }
+
+    .card-actions {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 7px;
+      margin-top: 9px;
+    }
+
+    .mini-btn {
+      min-height: 34px;
+      padding: 7px 8px;
+      border-radius: 999px;
+      font-size: 0.76rem;
+    }
+
+    .note-input {
+      min-height: 36px;
+      margin-top: 9px;
+      font-size: 0.82rem;
+      border-radius: 999px;
+    }
+
+    .side-stack {
+      display: grid;
+      gap: 14px;
+      position: sticky;
+      top: 92px;
+    }
+
+    .side-panel {
+      padding: 14px;
+    }
+
+    .panel-title {
+      margin: 0 0 10px;
+      font-size: 0.82rem;
+      font-weight: 950;
+      color: #fff;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .command-output {
+      min-height: 116px;
+      padding: 12px;
+      border-radius: var(--radius-md);
+      background: rgba(0,0,0,0.24);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: #e9faff;
+      white-space: pre-wrap;
+      word-break: break-word;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 0.82rem;
+      line-height: 1.45;
+    }
+
+    .stack {
+      display: grid;
+      gap: 10px;
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .three-col {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .region-grid {
+      display: grid;
+      gap: 8px;
+    }
+
+    .region-row {
+      display: grid;
+      grid-template-columns: 82px 1fr 52px;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+
+    .region-meter {
+      height: 9px;
+      border-radius: 999px;
+      overflow: hidden;
+      background: rgba(255,255,255,0.08);
+    }
+
+    .region-meter span {
+      display: block;
+      height: 100%;
+      width: 0%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--cyan), var(--mint), var(--gold));
+    }
+
+    .import-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 320px;
+      gap: 14px;
+      align-items: start;
+    }
+
+    .custom-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .custom-card {
+      border-radius: var(--radius-md);
+      padding: 12px;
+      background: rgba(255,255,255,0.055);
+      display: grid;
+      gap: 9px;
+    }
+
+    .custom-card strong {
+      font-size: 1rem;
+    }
+
+    .empty-state,
+    .loading-state {
+      padding: 36px;
       text-align: center;
-      color: var(--soft);
-      font-size: 0.84rem;
-      margin-top: 16px;
-      padding-bottom: 10px;
-      line-height: 1.5;
+      color: var(--muted);
+      border-radius: var(--radius-lg);
+      border: 1px dashed var(--border);
+      background: rgba(255,255,255,0.045);
     }
 
     .toast {
       position: fixed;
       left: 50%;
-      bottom: 24px;
-      transform: translate(-50%, 18px);
+      bottom: 22px;
+      z-index: 20;
+      transform: translate(-50%, 16px);
       opacity: 0;
       pointer-events: none;
-      border: 1px solid rgba(138, 240, 187, 0.42);
-      color: #eafff4;
-      background: rgba(16, 32, 35, 0.92);
       border-radius: 999px;
       padding: 12px 16px;
+      background: rgba(10, 32, 32, 0.94);
+      border: 1px solid rgba(138, 240, 187, 0.44);
+      color: #eafff4;
       box-shadow: 0 18px 50px rgba(0,0,0,0.38);
-      transition: opacity 0.22s ease, transform 0.22s ease;
-      z-index: 10;
-      font-weight: 800;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      font-weight: 850;
     }
 
     .toast.show {
@@ -781,28 +655,57 @@
       transform: translate(-50%, 0);
     }
 
-    @media (max-width: 1120px) {
-      .hero { grid-template-columns: 1fr; }
-      .hero-art { min-height: 360px; }
-      .dashboard-grid { grid-template-columns: 1fr; }
-      .quick-panel { position: static; }
-      .controls { grid-template-columns: 1fr 1fr 1fr; position: static; }
-      .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .footer {
+      margin-top: 18px;
+      padding-bottom: 10px;
+      text-align: center;
+      color: var(--soft);
+      font-size: 0.82rem;
+      line-height: 1.5;
+    }
+
+    .footer a { color: var(--cyan); }
+
+    @media (max-width: 1180px) {
+      .hero,
+      .layout,
+      .import-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .side-stack {
+        position: static;
+      }
+
+      .toolbar {
+        position: static;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .stats {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
     }
 
     @media (max-width: 720px) {
-      .wrap { padding: 16px; }
-      .hero { padding: 18px; border-radius: 24px; }
-      .hero-art { min-height: 300px; }
-      .stats { grid-template-columns: 1fr 1fr; }
-      .controls { grid-template-columns: 1fr 1fr; }
-      .list { grid-template-columns: 1fr; }
-      .card { grid-template-columns: 30px 78px minmax(0, 1fr); }
-      .card .badge { grid-column: 3; width: fit-content; margin-top: -2px; }
-      .art-shell { width: 78px; height: 78px; border-radius: 19px; }
-      .sprite { width: 90px; height: 90px; }
-      .ring-card { grid-template-columns: 1fr; }
-      .progress-ring { margin: 0 auto; }
+      .wrap { padding: 14px; }
+      .hero { padding: 16px; border-radius: 20px; }
+      .target-panel { grid-template-columns: 1fr; text-align: center; }
+      .target-art { margin: 0 auto; }
+      .toolbar,
+      .stats,
+      .two-col,
+      .three-col {
+        grid-template-columns: 1fr;
+      }
+      .species-grid { grid-template-columns: 1fr; }
+      .species-card { grid-template-columns: 76px minmax(0, 1fr); }
+      .sprite-box { width: 76px; height: 76px; border-radius: 18px; }
+      .sprite-box img { width: 86px; height: 86px; }
+      .card-checks,
+      .card-actions {
+        grid-template-columns: 1fr;
+      }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -812,7 +715,6 @@
         scroll-behavior: auto !important;
         transition-duration: 0.001ms !important;
       }
-      .card { transform: none !important; }
     }
   </style>
 </head>
@@ -820,628 +722,835 @@
   <div class="wrap">
     <section class="hero">
       <div class="hero-main">
-        <div class="eyebrow">Private shiny tracker · exact Kanto checklist data</div>
-        <h1><span class="gradient-text">Kanto Shiny Checklist</span></h1>
-        <p class="hero-copy">Track all 151 Kanto shiny Pokémon in one place. This upgraded version keeps the original checklist logic, autosave key, import/export save shape, and your pre-checked inventory, but wraps it in a more visual trophy-case interface.</p>
-        <p>Special forms are still paired to their base species instead of being counted as separate Kanto dex entries.</p>
-
-        <div class="summary-strip" aria-label="Checklist details">
-          <span class="chip">Save key: <strong>kanto_shiny_checklist_v1</strong></span>
-          <span class="chip">Kanto entries: <strong>151</strong></span>
-          <span class="chip">Default owned: <strong id="defaultOwnedCount">0</strong></span>
+        <div class="eyebrow">Personal Pokétwo tracker</div>
+        <h1><span class="gradient-text">Collection Command Center</span></h1>
+        <p>Track caught, missing, shiny, wishlist, hunt targets, custom event forms, notes, and copy-ready Pokétwo commands for you and your friend.</p>
+        <div class="top-actions">
+          <select id="playerSelect" aria-label="Active player"></select>
+          <button id="addPlayerBtn" type="button">Add Player</button>
+          <button id="exportBtn" type="button">Export Backup</button>
+          <button id="importBtn" type="button">Import Backup</button>
+          <input id="importFileInput" type="file" accept="application/json" hidden />
         </div>
-
         <div class="stats">
           <div class="stat">
-            <div class="label">Owned</div>
-            <div class="value" id="ownedCount">0</div>
-            <div class="sub">Shinies checked off</div>
+            <div class="label">Caught</div>
+            <div class="value" id="caughtCount">0</div>
+            <div class="sub" id="caughtSub">0 species</div>
           </div>
           <div class="stat">
             <div class="label">Missing</div>
-            <div class="value" id="missingCount">151</div>
-            <div class="sub">Still on the hunt</div>
+            <div class="value" id="missingCount">0</div>
+            <div class="sub">Base species</div>
           </div>
           <div class="stat">
-            <div class="label">Completion</div>
-            <div class="value" id="percentComplete">0%</div>
-            <div class="sub" id="completionSub">0 of 151</div>
+            <div class="label">Shiny</div>
+            <div class="value" id="shinyCount">0</div>
+            <div class="sub">Confirmed shinies</div>
           </div>
           <div class="stat">
-            <div class="label">Last Saved</div>
-            <div class="value" id="lastSaved" style="font-size:1rem;letter-spacing:0;">Not yet</div>
-            <div class="sub">Browser local storage</div>
+            <div class="label">Wishlist</div>
+            <div class="value" id="wishlistCount">0</div>
+            <div class="sub">Trade or market targets</div>
           </div>
-        </div>
-
-        <div class="progress-shell" aria-label="Progress">
-          <div class="progress-bar" id="progressBar"></div>
-        </div>
-      </div>
-
-      <div class="hero-art" aria-hidden="true">
-        <div class="pokeball-orbit"></div>
-        <img class="featured-sprite" id="featuredSprite" alt="" />
-        <div class="sprite-cloud" id="spriteCloud"></div>
-      </div>
-    </section>
-
-    <section class="panel controls" aria-label="Checklist controls">
-      <input id="searchInput" type="search" placeholder="Search by Pokédex number or name" />
-      <select id="statusFilter">
-        <option value="all">Show: All</option>
-        <option value="owned">Show: Owned</option>
-        <option value="missing">Show: Missing</option>
-      </select>
-      <select id="sortMode">
-        <option value="dex">Sort: Dex Number</option>
-        <option value="name">Sort: Name</option>
-        <option value="ownedFirst">Sort: Owned First</option>
-        <option value="missingFirst">Sort: Missing First</option>
-      </select>
-      <button id="exportBtn" type="button">Export Save</button>
-      <button id="importBtn" type="button">Import Save</button>
-      <button id="resetDefaultsBtn" type="button">Reset to Current</button>
-      <button id="clearAllBtn" type="button" class="danger-btn">Clear All</button>
-      <input id="importFileInput" type="file" accept="application/json" hidden />
-    </section>
-
-    <div class="dashboard-grid">
-      <main>
-        <section class="list" id="pokemonList" aria-live="polite"></section>
-      </main>
-
-      <aside class="panel quick-panel" aria-label="Quick hunt panel">
-        <div class="ring-card">
-          <div class="progress-ring" aria-hidden="true">
-            <svg viewBox="0 0 120 120">
-              <defs>
-                <linearGradient id="ringGradient" x1="0" x2="1" y1="0" y2="1">
-                  <stop offset="0%" stop-color="#69e4ff" />
-                  <stop offset="55%" stop-color="#c68cff" />
-                  <stop offset="100%" stop-color="#ffe66d" />
-                </linearGradient>
-              </defs>
-              <circle class="track" cx="60" cy="60" r="50"></circle>
-              <circle class="meter" id="progressRingMeter" cx="60" cy="60" r="50"></circle>
-            </svg>
-            <div class="ring-value" id="ringValue">0%<span>complete</span></div>
-          </div>
-          <div>
-            <div class="sidebar-title">Next hunt target</div>
-            <p class="tiny">A fast way to pick something missing without changing your original checklist format.</p>
-          </div>
-        </div>
-
-        <div class="hunt-target" id="huntTarget">
-          <img id="targetSprite" alt="" />
-          <div>
-            <div class="target-name" id="targetName">Loading...</div>
-            <div class="target-meta" id="targetMeta">Next missing shiny</div>
-          </div>
-        </div>
-
-        <div class="quick-actions">
-          <button id="randomMissingBtn" type="button" class="primary-btn">Roll Random Missing</button>
-          <button id="copyMissingBtn" type="button">Copy Missing List</button>
-        </div>
-
-        <div class="mini-grid">
-          <div class="mini-card">
-            <div class="label">Visible</div>
-            <div class="value" id="visibleCount">0</div>
-          </div>
-          <div class="mini-card">
+          <div class="stat">
             <div class="label">Saved</div>
-            <div class="value" id="saveStatus">Ready</div>
+            <div class="value" id="savedAt" style="font-size:1rem;letter-spacing:0;">Ready</div>
+            <div class="sub">This browser</div>
+          </div>
+        </div>
+        <div class="progress-shell" aria-label="Caught progress">
+          <div class="progress-bar" id="caughtProgress"></div>
+        </div>
+      </div>
+      <aside class="hero-side">
+        <div class="target-panel">
+          <div class="target-art">
+            <img id="targetSprite" alt="" />
+          </div>
+          <div>
+            <div class="panel-title">Active hunt</div>
+            <div class="target-name" id="targetName">Loading...</div>
+            <div class="target-meta" id="targetMeta">Pick a shiny target from the tracker.</div>
+            <div class="top-actions">
+              <button id="rollTargetBtn" type="button" class="primary-btn">Roll Missing Shiny</button>
+              <button id="copyHuntBtn" type="button">Copy Hunt</button>
+            </div>
           </div>
         </div>
       </aside>
-    </div>
-
-    <section class="panel notes">
-      <strong>Paired special forms</strong>
-      <ul>
-        <li>Bug Catcher Weedle is tracked under Weedle.</li>
-        <li>Papel Picado Pidgey is tracked under Pidgey.</li>
-        <li>Mega Pidgeot is tracked under Pidgeot.</li>
-        <li>Mega Gengar is tracked under Gengar.</li>
-      </ul>
-      <div class="tiny">Tip: Export your save occasionally if you want a backup you can move to another device or browser.</div>
     </section>
 
-    <div class="footer">Self-contained checklist logic with remote shiny sprites loaded from the PokéAPI sprites GitHub repository. Pokémon images are fan-use assets; keep this private/non-commercial unless you have the needed rights.</div>
+    <section class="panel toolbar" aria-label="Collection controls">
+      <input id="searchInput" type="search" placeholder="Search name or dex number" />
+      <select id="generationFilter" aria-label="Region filter"></select>
+      <select id="statusFilter" aria-label="Status filter">
+        <option value="all">All Statuses</option>
+        <option value="caught">Caught</option>
+        <option value="missing">Missing</option>
+        <option value="shiny">Shiny</option>
+        <option value="notShiny">Not Shiny</option>
+        <option value="wishlist">Wishlist</option>
+        <option value="hunt">Hunt Target</option>
+      </select>
+      <select id="sortMode" aria-label="Sort mode">
+        <option value="dex">Dex Number</option>
+        <option value="name">Name</option>
+        <option value="caughtFirst">Caught First</option>
+        <option value="missingFirst">Missing First</option>
+        <option value="shinyFirst">Shiny First</option>
+        <option value="wishlistFirst">Wishlist First</option>
+      </select>
+      <button id="copyMissingBtn" type="button">Copy Missing</button>
+    </section>
+
+    <div class="layout">
+      <main>
+        <nav class="panel tabs" aria-label="Tool views">
+          <button class="tab-btn active" type="button" data-view="trackerView">Tracker</button>
+          <button class="tab-btn" type="button" data-view="importView">Paste Import</button>
+          <button class="tab-btn" type="button" data-view="formsView">Event Forms</button>
+          <button class="tab-btn" type="button" data-view="saveView">Profiles</button>
+        </nav>
+
+        <section class="view active" id="trackerView">
+          <div class="loading-state" id="loadingState">Loading Pokétwo species data...</div>
+          <section class="species-grid" id="speciesGrid" aria-live="polite"></section>
+        </section>
+
+        <section class="view" id="importView">
+          <div class="panel side-panel import-grid">
+            <div class="stack">
+              <h2 class="panel-title">Paste Pokétwo Output</h2>
+              <textarea id="pasteInput" placeholder="Paste inventory, shiny, market, or notes text here"></textarea>
+              <div class="two-col">
+                <select id="pasteMode">
+                  <option value="caught-add">Mark found species as caught</option>
+                  <option value="shiny-add">Mark found species as shiny</option>
+                  <option value="wishlist-add">Add found species to wishlist</option>
+                  <option value="wishlist-remove">Remove found species from wishlist</option>
+                  <option value="caught-replace">Replace caught list with found species</option>
+                </select>
+                <button id="applyPasteBtn" type="button" class="primary-btn">Apply Paste</button>
+              </div>
+              <div class="command-output" id="pasteResult">Waiting for pasted text.</div>
+            </div>
+            <div class="stack">
+              <h2 class="panel-title">Command Prefix</h2>
+              <input id="commandPrefixInput" type="text" />
+              <button id="savePrefixBtn" type="button">Save Prefix</button>
+              <div class="command-output" id="quickCommandOutput"></div>
+              <button id="copyCommandOutputBtn" type="button">Copy Command Box</button>
+            </div>
+          </div>
+        </section>
+
+        <section class="view" id="formsView">
+          <div class="panel side-panel">
+            <h2 class="panel-title">Custom Event Forms</h2>
+            <div class="three-col">
+              <input id="customNameInput" type="text" placeholder="Event or form name" />
+              <input id="customBaseInput" type="text" placeholder="Base species / note" />
+              <button id="addCustomBtn" type="button" class="primary-btn">Add Form</button>
+            </div>
+            <div class="custom-list" id="customList"></div>
+          </div>
+        </section>
+
+        <section class="view" id="saveView">
+          <div class="panel side-panel stack">
+            <h2 class="panel-title">Profiles And Save Data</h2>
+            <div class="three-col">
+              <input id="renamePlayerInput" type="text" placeholder="Player name" />
+              <button id="renamePlayerBtn" type="button">Rename Player</button>
+              <button id="resetPlayerBtn" type="button" class="danger-btn">Reset Player</button>
+            </div>
+            <div class="command-output" id="saveInfo"></div>
+          </div>
+        </section>
+      </main>
+
+      <aside class="side-stack">
+        <section class="panel side-panel">
+          <h2 class="panel-title">Command Builder</h2>
+          <div class="stack">
+            <select id="commandTargetSelect" aria-label="Command target"></select>
+            <div class="two-col">
+              <button data-command="hunt" type="button">Shiny Hunt</button>
+              <button data-command="marketShiny" type="button">Market Shiny</button>
+              <button data-command="marketNormal" type="button">Market Normal</button>
+              <button data-command="inventory" type="button">Inventory Search</button>
+              <button data-command="inventoryShiny" type="button">Inventory Shiny</button>
+              <button data-command="dexMissing" type="button">Dex Missing</button>
+            </div>
+            <div class="command-output" id="commandOutput"></div>
+            <button id="copyCommandBtn" type="button" class="primary-btn">Copy Command</button>
+          </div>
+        </section>
+
+        <section class="panel side-panel">
+          <h2 class="panel-title">Region Progress</h2>
+          <div class="region-grid" id="regionGrid"></div>
+        </section>
+
+        <section class="panel side-panel">
+          <h2 class="panel-title">Fast Lists</h2>
+          <div class="stack">
+            <button id="copyWishlistBtn" type="button">Copy Wishlist</button>
+            <button id="copyShinyMissingBtn" type="button">Copy Non-Shiny Caught</button>
+            <button id="copyNextHuntsBtn" type="button">Copy Next 10 Hunts</button>
+          </div>
+        </section>
+      </aside>
+    </div>
+
+    <div class="footer">
+      Static personal tracker. No Discord automation. Animated sprites load when available, with still-art fallbacks. Data source:
+      <a href="https://pokeapi.co/" target="_blank" rel="noreferrer">PokéAPI</a>.
+      Pokétwo references:
+      <a href="https://poketwo.net/" target="_blank" rel="noreferrer">poketwo.net</a> and
+      <a href="https://docs.poketwo.net/" target="_blank" rel="noreferrer">docs.poketwo.net</a>.
+    </div>
   </div>
 
-  <div class="toast" id="toast" role="status" aria-live="polite">Copied.</div>
+  <div class="toast" id="toast" role="status" aria-live="polite">Saved.</div>
 
   <script>
-    const STORAGE_KEY = 'kanto_shiny_checklist_v1';
-    const SETTINGS_KEY = 'kanto_shiny_checklist_settings_v1';
+    const APP_KEY = 'poketwo_collection_command_center_v2';
+    const LEGACY_KEY = 'kanto_shiny_checklist_v1';
+    const LEGACY_SETTINGS_KEY = 'kanto_shiny_checklist_settings_v1';
+    const SPECIES_CACHE_KEY = 'poketwo_species_cache_v1';
+    const IMAGE_BASE = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon';
 
-    const pokemon = [
-      { dex: 1, name: 'Bulbasaur' },
-      { dex: 2, name: 'Ivysaur' },
-      { dex: 3, name: 'Venusaur' },
-      { dex: 4, name: 'Charmander' },
-      { dex: 5, name: 'Charmeleon' },
-      { dex: 6, name: 'Charizard' },
-      { dex: 7, name: 'Squirtle' },
-      { dex: 8, name: 'Wartortle' },
-      { dex: 9, name: 'Blastoise' },
-      { dex: 10, name: 'Caterpie' },
-      { dex: 11, name: 'Metapod' },
-      { dex: 12, name: 'Butterfree' },
-      { dex: 13, name: 'Weedle' },
-      { dex: 14, name: 'Kakuna' },
-      { dex: 15, name: 'Beedrill' },
-      { dex: 16, name: 'Pidgey' },
-      { dex: 17, name: 'Pidgeotto' },
-      { dex: 18, name: 'Pidgeot' },
-      { dex: 19, name: 'Rattata' },
-      { dex: 20, name: 'Raticate' },
-      { dex: 21, name: 'Spearow' },
-      { dex: 22, name: 'Fearow' },
-      { dex: 23, name: 'Ekans' },
-      { dex: 24, name: 'Arbok' },
-      { dex: 25, name: 'Pikachu' },
-      { dex: 26, name: 'Raichu' },
-      { dex: 27, name: 'Sandshrew' },
-      { dex: 28, name: 'Sandslash' },
-      { dex: 29, name: 'Nidoran♀' },
-      { dex: 30, name: 'Nidorina' },
-      { dex: 31, name: 'Nidoqueen' },
-      { dex: 32, name: 'Nidoran♂' },
-      { dex: 33, name: 'Nidorino' },
-      { dex: 34, name: 'Nidoking' },
-      { dex: 35, name: 'Clefairy' },
-      { dex: 36, name: 'Clefable' },
-      { dex: 37, name: 'Vulpix' },
-      { dex: 38, name: 'Ninetales' },
-      { dex: 39, name: 'Jigglypuff' },
-      { dex: 40, name: 'Wigglytuff' },
-      { dex: 41, name: 'Zubat' },
-      { dex: 42, name: 'Golbat' },
-      { dex: 43, name: 'Oddish' },
-      { dex: 44, name: 'Gloom' },
-      { dex: 45, name: 'Vileplume' },
-      { dex: 46, name: 'Paras' },
-      { dex: 47, name: 'Parasect' },
-      { dex: 48, name: 'Venonat' },
-      { dex: 49, name: 'Venomoth' },
-      { dex: 50, name: 'Diglett' },
-      { dex: 51, name: 'Dugtrio' },
-      { dex: 52, name: 'Meowth' },
-      { dex: 53, name: 'Persian' },
-      { dex: 54, name: 'Psyduck' },
-      { dex: 55, name: 'Golduck' },
-      { dex: 56, name: 'Mankey' },
-      { dex: 57, name: 'Primeape' },
-      { dex: 58, name: 'Growlithe' },
-      { dex: 59, name: 'Arcanine' },
-      { dex: 60, name: 'Poliwag' },
-      { dex: 61, name: 'Poliwhirl' },
-      { dex: 62, name: 'Poliwrath' },
-      { dex: 63, name: 'Abra' },
-      { dex: 64, name: 'Kadabra' },
-      { dex: 65, name: 'Alakazam' },
-      { dex: 66, name: 'Machop' },
-      { dex: 67, name: 'Machoke' },
-      { dex: 68, name: 'Machamp' },
-      { dex: 69, name: 'Bellsprout' },
-      { dex: 70, name: 'Weepinbell' },
-      { dex: 71, name: 'Victreebel' },
-      { dex: 72, name: 'Tentacool' },
-      { dex: 73, name: 'Tentacruel' },
-      { dex: 74, name: 'Geodude' },
-      { dex: 75, name: 'Graveler' },
-      { dex: 76, name: 'Golem' },
-      { dex: 77, name: 'Ponyta' },
-      { dex: 78, name: 'Rapidash' },
-      { dex: 79, name: 'Slowpoke' },
-      { dex: 80, name: 'Slowbro' },
-      { dex: 81, name: 'Magnemite' },
-      { dex: 82, name: 'Magneton' },
-      { dex: 83, name: "Farfetch'd" },
-      { dex: 84, name: 'Doduo' },
-      { dex: 85, name: 'Dodrio' },
-      { dex: 86, name: 'Seel' },
-      { dex: 87, name: 'Dewgong' },
-      { dex: 88, name: 'Grimer' },
-      { dex: 89, name: 'Muk' },
-      { dex: 90, name: 'Shellder' },
-      { dex: 91, name: 'Cloyster' },
-      { dex: 92, name: 'Gastly' },
-      { dex: 93, name: 'Haunter' },
-      { dex: 94, name: 'Gengar' },
-      { dex: 95, name: 'Onix' },
-      { dex: 96, name: 'Drowzee' },
-      { dex: 97, name: 'Hypno' },
-      { dex: 98, name: 'Krabby' },
-      { dex: 99, name: 'Kingler' },
-      { dex: 100, name: 'Voltorb' },
-      { dex: 101, name: 'Electrode' },
-      { dex: 102, name: 'Exeggcute' },
-      { dex: 103, name: 'Exeggutor' },
-      { dex: 104, name: 'Cubone' },
-      { dex: 105, name: 'Marowak' },
-      { dex: 106, name: 'Hitmonlee' },
-      { dex: 107, name: 'Hitmonchan' },
-      { dex: 108, name: 'Lickitung' },
-      { dex: 109, name: 'Koffing' },
-      { dex: 110, name: 'Weezing' },
-      { dex: 111, name: 'Rhyhorn' },
-      { dex: 112, name: 'Rhydon' },
-      { dex: 113, name: 'Chansey' },
-      { dex: 114, name: 'Tangela' },
-      { dex: 115, name: 'Kangaskhan' },
-      { dex: 116, name: 'Horsea' },
-      { dex: 117, name: 'Seadra' },
-      { dex: 118, name: 'Goldeen' },
-      { dex: 119, name: 'Seaking' },
-      { dex: 120, name: 'Staryu' },
-      { dex: 121, name: 'Starmie' },
-      { dex: 122, name: 'Mr. Mime' },
-      { dex: 123, name: 'Scyther' },
-      { dex: 124, name: 'Jynx' },
-      { dex: 125, name: 'Electabuzz' },
-      { dex: 126, name: 'Magmar' },
-      { dex: 127, name: 'Pinsir' },
-      { dex: 128, name: 'Tauros' },
-      { dex: 129, name: 'Magikarp' },
-      { dex: 130, name: 'Gyarados' },
-      { dex: 131, name: 'Lapras' },
-      { dex: 132, name: 'Ditto' },
-      { dex: 133, name: 'Eevee' },
-      { dex: 134, name: 'Vaporeon' },
-      { dex: 135, name: 'Jolteon' },
-      { dex: 136, name: 'Flareon' },
-      { dex: 137, name: 'Porygon' },
-      { dex: 138, name: 'Omanyte' },
-      { dex: 139, name: 'Omastar' },
-      { dex: 140, name: 'Kabuto' },
-      { dex: 141, name: 'Kabutops' },
-      { dex: 142, name: 'Aerodactyl' },
-      { dex: 143, name: 'Snorlax' },
-      { dex: 144, name: 'Articuno' },
-      { dex: 145, name: 'Zapdos' },
-      { dex: 146, name: 'Moltres' },
-      { dex: 147, name: 'Dratini' },
-      { dex: 148, name: 'Dragonair' },
-      { dex: 149, name: 'Dragonite' },
-      { dex: 150, name: 'Mewtwo' },
-      { dex: 151, name: 'Mew' }
-    ];
-
-    const defaultOwnedDex = new Set([
+    const DEFAULT_KANTO_SHINIES = new Set([
       1, 4, 7, 10, 11, 13, 16, 17, 18, 19, 21, 22, 25, 29, 30, 31, 32, 37,
       41, 43, 50, 51, 52, 53, 54, 57, 58, 59, 61, 62, 66, 68, 69, 70, 74, 76,
       79, 80, 82, 84, 86, 88, 89, 92, 93, 94, 95, 98, 99, 101, 104, 106, 111,
       116, 120, 121, 122, 123, 125, 128, 129, 137, 138
     ]);
 
-    const IMAGE_BASE = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon';
-    const RING_CIRCUMFERENCE = 314;
+    const FALLBACK_SPECIES = [
+      'Bulbasaur','Ivysaur','Venusaur','Charmander','Charmeleon','Charizard','Squirtle','Wartortle','Blastoise','Caterpie','Metapod','Butterfree','Weedle','Kakuna','Beedrill','Pidgey','Pidgeotto','Pidgeot','Rattata','Raticate','Spearow','Fearow','Ekans','Arbok','Pikachu','Raichu','Sandshrew','Sandslash','Nidoran♀','Nidorina','Nidoqueen','Nidoran♂','Nidorino','Nidoking','Clefairy','Clefable','Vulpix','Ninetales','Jigglypuff','Wigglytuff','Zubat','Golbat','Oddish','Gloom','Vileplume','Paras','Parasect','Venonat','Venomoth','Diglett','Dugtrio','Meowth','Persian','Psyduck','Golduck','Mankey','Primeape','Growlithe','Arcanine','Poliwag','Poliwhirl','Poliwrath','Abra','Kadabra','Alakazam','Machop','Machoke','Machamp','Bellsprout','Weepinbell','Victreebel','Tentacool','Tentacruel','Geodude','Graveler','Golem','Ponyta','Rapidash','Slowpoke','Slowbro','Magnemite','Magneton',"Farfetch'd",'Doduo','Dodrio','Seel','Dewgong','Grimer','Muk','Shellder','Cloyster','Gastly','Haunter','Gengar','Onix','Drowzee','Hypno','Krabby','Kingler','Voltorb','Electrode','Exeggcute','Exeggutor','Cubone','Marowak','Hitmonlee','Hitmonchan','Lickitung','Koffing','Weezing','Rhyhorn','Rhydon','Chansey','Tangela','Kangaskhan','Horsea','Seadra','Goldeen','Seaking','Staryu','Starmie','Mr. Mime','Scyther','Jynx','Electabuzz','Magmar','Pinsir','Tauros','Magikarp','Gyarados','Lapras','Ditto','Eevee','Vaporeon','Jolteon','Flareon','Porygon','Omanyte','Omastar','Kabuto','Kabutops','Aerodactyl','Snorlax','Articuno','Zapdos','Moltres','Dratini','Dragonair','Dragonite','Mewtwo','Mew'
+    ].map((name, index) => ({ dex: index + 1, apiName: name.toLowerCase().replace(/[^a-z0-9]+/g, '-'), name }));
 
-    const listEl = document.getElementById('pokemonList');
-    const searchInput = document.getElementById('searchInput');
-    const statusFilter = document.getElementById('statusFilter');
-    const sortMode = document.getElementById('sortMode');
-    const ownedCountEl = document.getElementById('ownedCount');
-    const missingCountEl = document.getElementById('missingCount');
-    const percentCompleteEl = document.getElementById('percentComplete');
-    const completionSubEl = document.getElementById('completionSub');
-    const progressBarEl = document.getElementById('progressBar');
-    const progressRingMeterEl = document.getElementById('progressRingMeter');
-    const ringValueEl = document.getElementById('ringValue');
-    const lastSavedEl = document.getElementById('lastSaved');
-    const exportBtn = document.getElementById('exportBtn');
-    const importBtn = document.getElementById('importBtn');
-    const importFileInput = document.getElementById('importFileInput');
-    const resetDefaultsBtn = document.getElementById('resetDefaultsBtn');
-    const clearAllBtn = document.getElementById('clearAllBtn');
-    const defaultOwnedCountEl = document.getElementById('defaultOwnedCount');
-    const visibleCountEl = document.getElementById('visibleCount');
-    const saveStatusEl = document.getElementById('saveStatus');
-    const randomMissingBtn = document.getElementById('randomMissingBtn');
-    const copyMissingBtn = document.getElementById('copyMissingBtn');
-    const targetNameEl = document.getElementById('targetName');
-    const targetMetaEl = document.getElementById('targetMeta');
-    const targetSpriteEl = document.getElementById('targetSprite');
-    const featuredSpriteEl = document.getElementById('featuredSprite');
-    const spriteCloudEl = document.getElementById('spriteCloud');
-    const toastEl = document.getElementById('toast');
+    const GENERATIONS = [
+      { id: 'all', name: 'All Regions', min: 1, max: 99999 },
+      { id: 'kanto', name: 'Kanto', min: 1, max: 151 },
+      { id: 'johto', name: 'Johto', min: 152, max: 251 },
+      { id: 'hoenn', name: 'Hoenn', min: 252, max: 386 },
+      { id: 'sinnoh', name: 'Sinnoh', min: 387, max: 493 },
+      { id: 'unova', name: 'Unova', min: 494, max: 649 },
+      { id: 'kalos', name: 'Kalos', min: 650, max: 721 },
+      { id: 'alola', name: 'Alola', min: 722, max: 809 },
+      { id: 'galar', name: 'Galar/Hisui', min: 810, max: 905 },
+      { id: 'paldea', name: 'Paldea', min: 906, max: 1025 },
+      { id: 'new', name: 'New/Other', min: 1026, max: 99999 }
+    ];
 
-    function buildDefaultState() {
-      const owned = {};
-      pokemon.forEach(p => { owned[p.dex] = defaultOwnedDex.has(p.dex); });
-      return { owned, lastSaved: null };
-    }
+    const SPECIAL_NAMES = {
+      'nidoran-f': 'Nidoran♀',
+      'nidoran-m': 'Nidoran♂',
+      'mr-mime': 'Mr. Mime',
+      'mime-jr': 'Mime Jr.',
+      'farfetchd': "Farfetch'd",
+      'sirfetchd': "Sirfetch'd",
+      'type-null': 'Type: Null',
+      'ho-oh': 'Ho-Oh',
+      'porygon-z': 'Porygon-Z',
+      'jangmo-o': 'Jangmo-o',
+      'hakamo-o': 'Hakamo-o',
+      'kommo-o': 'Kommo-o',
+      'tapu-koko': 'Tapu Koko',
+      'tapu-lele': 'Tapu Lele',
+      'tapu-bulu': 'Tapu Bulu',
+      'tapu-fini': 'Tapu Fini',
+      'wo-chien': 'Wo-Chien',
+      'chien-pao': 'Chien-Pao',
+      'ting-lu': 'Ting-Lu',
+      'chi-yu': 'Chi-Yu',
+      'great-tusk': 'Great Tusk',
+      'scream-tail': 'Scream Tail',
+      'brute-bonnet': 'Brute Bonnet',
+      'flutter-mane': 'Flutter Mane',
+      'slither-wing': 'Slither Wing',
+      'sandy-shocks': 'Sandy Shocks',
+      'iron-treads': 'Iron Treads',
+      'iron-bundle': 'Iron Bundle',
+      'iron-hands': 'Iron Hands',
+      'iron-jugulis': 'Iron Jugulis',
+      'iron-moth': 'Iron Moth',
+      'iron-thorns': 'Iron Thorns',
+      'roaring-moon': 'Roaring Moon',
+      'iron-valiant': 'Iron Valiant',
+      'walking-wake': 'Walking Wake',
+      'iron-leaves': 'Iron Leaves',
+      'gouging-fire': 'Gouging Fire',
+      'raging-bolt': 'Raging Bolt',
+      'iron-boulder': 'Iron Boulder',
+      'iron-crown': 'Iron Crown'
+    };
 
-    function buildDefaultSettings() {
+    const $ = id => document.getElementById(id);
+    const speciesGrid = $('speciesGrid');
+    const loadingState = $('loadingState');
+    const toastEl = $('toast');
+    let toastTimer = null;
+    let species = [];
+    let aliasIndex = [];
+    let state = loadAppState();
+    let activeCommand = '';
+
+    function makePlayer(id, name) {
       return {
-        search: '',
-        status: 'all',
-        sort: 'dex',
-        activeTargetDex: null
+        id,
+        name,
+        caught: {},
+        shiny: {},
+        wishlist: {},
+        notes: {},
+        huntDex: null,
+        customForms: []
       };
     }
 
-    function loadState() {
+    function defaultAppState() {
+      const me = makePlayer('me', 'Me');
+      seedLegacyIntoPlayer(me);
+      return {
+        version: 2,
+        currentPlayerId: 'me',
+        commandPrefix: '@Pokétwo#8236',
+        players: [me, makePlayer('friend', 'Friend')],
+        updatedAt: null
+      };
+    }
+
+    function seedLegacyIntoPlayer(player) {
+      let owned = null;
       try {
-        const raw = localStorage.getItem(STORAGE_KEY);
-        if (!raw) return buildDefaultState();
+        const legacy = JSON.parse(localStorage.getItem(LEGACY_KEY) || 'null');
+        if (legacy?.owned) owned = legacy.owned;
+      } catch (err) {
+        owned = null;
+      }
+      for (const dex of DEFAULT_KANTO_SHINIES) {
+        if (!owned || owned[dex]) {
+          player.caught[dex] = true;
+          player.shiny[dex] = true;
+        }
+      }
+      if (owned) {
+        Object.entries(owned).forEach(([dex, value]) => {
+          if (value) {
+            player.caught[dex] = true;
+            player.shiny[dex] = true;
+          }
+        });
+      }
+    }
+
+    function loadAppState() {
+      try {
+        const raw = localStorage.getItem(APP_KEY);
+        if (!raw) return defaultAppState();
         const parsed = JSON.parse(raw);
-        const fallback = buildDefaultState();
+        const fallback = defaultAppState();
         return {
-          owned: { ...fallback.owned, ...(parsed.owned || {}) },
-          lastSaved: parsed.lastSaved || null
+          ...fallback,
+          ...parsed,
+          players: Array.isArray(parsed.players) && parsed.players.length ? parsed.players.map(player => ({
+            ...makePlayer(player.id || makeId('player'), player.name || 'Player'),
+            ...player,
+            caught: player.caught || {},
+            shiny: player.shiny || {},
+            wishlist: player.wishlist || {},
+            notes: player.notes || {},
+            customForms: Array.isArray(player.customForms) ? player.customForms : []
+          })) : fallback.players
         };
       } catch (err) {
-        return buildDefaultState();
+        return defaultAppState();
       }
     }
 
-    function loadSettings() {
-      try {
-        const raw = localStorage.getItem(SETTINGS_KEY);
-        if (!raw) return buildDefaultSettings();
-        const parsed = JSON.parse(raw);
-        return { ...buildDefaultSettings(), ...parsed };
-      } catch (err) {
-        return buildDefaultSettings();
-      }
+    function saveAppState() {
+      state.updatedAt = new Date().toISOString();
+      localStorage.setItem(APP_KEY, JSON.stringify(state));
+      $('savedAt').textContent = new Date(state.updatedAt).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+      renderSaveInfo();
     }
 
-    let state = loadState();
-    let settings = loadSettings();
-    let activeTargetDex = Number.isInteger(settings.activeTargetDex) ? settings.activeTargetDex : null;
-    let toastTimer = null;
-
-    function saveState() {
-      state.lastSaved = new Date().toISOString();
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-      saveStatusEl.textContent = 'Saved';
-      updateSummary();
+    function makeId(prefix) {
+      if (window.crypto?.randomUUID) return `${prefix}-${window.crypto.randomUUID()}`;
+      return `${prefix}-${Date.now()}-${Math.random().toString(16).slice(2)}`;
     }
 
-    function saveSettings() {
-      settings = {
-        search: searchInput.value,
-        status: statusFilter.value,
-        sort: sortMode.value,
-        activeTargetDex
-      };
-      localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+    function currentPlayer() {
+      return state.players.find(player => player.id === state.currentPlayerId) || state.players[0];
     }
 
-    function formatDex(n) {
-      return String(n).padStart(3, '0');
+    function formatDex(dex) {
+      return String(dex).padStart(3, '0');
     }
 
-    function spriteUrls(dex) {
+    function displayName(apiName) {
+      if (SPECIAL_NAMES[apiName]) return SPECIAL_NAMES[apiName];
+      return apiName.split('-').map(part => part ? part[0].toUpperCase() + part.slice(1) : part).join(' ');
+    }
+
+    function normalizeText(value) {
+      return String(value || '')
+        .toLowerCase()
+        .replace(/♀/g, ' female ')
+        .replace(/♂/g, ' male ')
+        .replace(/pokémon/g, 'pokemon')
+        .replace(/[^a-z0-9]+/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+    }
+
+    function speciesAliases(item) {
+      const aliases = new Set([
+        normalizeText(item.name),
+        normalizeText(item.apiName),
+        normalizeText(item.apiName.replace(/-/g, ' '))
+      ]);
+      if (item.apiName === 'nidoran-f') ['nidoran f', 'nidoran female'].forEach(alias => aliases.add(alias));
+      if (item.apiName === 'nidoran-m') ['nidoran m', 'nidoran male'].forEach(alias => aliases.add(alias));
+      if (item.name === 'Mr. Mime') aliases.add('mister mime');
+      if (item.name === "Farfetch'd") aliases.add('farfetchd');
+      if (item.name === "Sirfetch'd") aliases.add('sirfetchd');
+      return [...aliases].filter(Boolean);
+    }
+
+    function buildAliasIndex() {
+      aliasIndex = species.flatMap(item => speciesAliases(item).map(alias => ({ alias, dex: item.dex })))
+        .sort((a, b) => b.alias.length - a.alias.length);
+    }
+
+    function generationForDex(dex) {
+      return GENERATIONS.find(gen => gen.id !== 'all' && dex >= gen.min && dex <= gen.max) || GENERATIONS[GENERATIONS.length - 1];
+    }
+
+    function spriteUrls(dex, shiny) {
+      const shinyPath = shiny ? '/shiny' : '';
       return [
-        `${IMAGE_BASE}/other/official-artwork/shiny/${dex}.png`,
-        `${IMAGE_BASE}/other/home/shiny/${dex}.png`,
-        `${IMAGE_BASE}/shiny/${dex}.png`,
+        `${IMAGE_BASE}/other/showdown${shinyPath}/${dex}.gif`,
+        `${IMAGE_BASE}/versions/generation-v/black-white/animated${shinyPath}/${dex}.gif`,
+        `${IMAGE_BASE}/other/showdown${shinyPath}/${dex}.png`,
+        `${IMAGE_BASE}/versions/generation-v/black-white${shinyPath}/${dex}.png`,
+        `${IMAGE_BASE}${shinyPath}/${dex}.png`,
+        `${IMAGE_BASE}/other/official-artwork${shinyPath}/${dex}.png`,
+        `${IMAGE_BASE}/other/home${shinyPath}/${dex}.png`,
         `${IMAGE_BASE}/other/official-artwork/${dex}.png`,
         `${IMAGE_BASE}/${dex}.png`
       ];
     }
 
-    function setSprite(img, dex) {
-      const urls = spriteUrls(dex);
+    function setSprite(img, dex, shiny = false) {
+      const urls = spriteUrls(dex, shiny);
       img.dataset.spriteIndex = '0';
-      img.dataset.dex = String(dex);
+      img.dataset.spriteMode = 'animated-first';
+      img.decoding = 'async';
+      if (!img.loading) img.loading = 'lazy';
       img.src = urls[0];
       img.onerror = () => {
-        const index = Number(img.dataset.spriteIndex || 0) + 1;
-        if (index < urls.length) {
-          img.dataset.spriteIndex = String(index);
-          img.src = urls[index];
+        const next = Number(img.dataset.spriteIndex || 0) + 1;
+        if (next < urls.length) {
+          img.dataset.spriteIndex = String(next);
+          img.dataset.spriteMode = next < 2 ? 'animated-first' : 'fallback';
+          img.src = urls[next];
         } else {
           img.onerror = null;
           img.removeAttribute('src');
-          img.alt = 'Sprite unavailable';
         }
       };
     }
 
-    function createSprite(dex, name, className = 'sprite') {
-      const img = document.createElement('img');
-      img.className = className;
-      img.loading = 'lazy';
-      img.decoding = 'async';
-      img.alt = `${name} shiny sprite`;
-      setSprite(img, dex);
-      return img;
+    async function loadSpecies() {
+      loadingState.style.display = 'block';
+      try {
+        const cached = JSON.parse(localStorage.getItem(SPECIES_CACHE_KEY) || 'null');
+        if (Array.isArray(cached?.species) && cached.species.length > 900) {
+          species = cached.species;
+        } else {
+          const response = await fetch('https://pokeapi.co/api/v2/pokemon-species?limit=1300');
+          if (!response.ok) throw new Error('Species request failed');
+          const data = await response.json();
+          species = data.results
+            .map(result => {
+              const match = result.url.match(/pokemon-species\/(\d+)\//);
+              const dex = match ? Number(match[1]) : null;
+              return dex ? { dex, apiName: result.name, name: displayName(result.name) } : null;
+            })
+            .filter(Boolean)
+            .sort((a, b) => a.dex - b.dex);
+          localStorage.setItem(SPECIES_CACHE_KEY, JSON.stringify({ species, cachedAt: new Date().toISOString() }));
+        }
+      } catch (err) {
+        species = FALLBACK_SPECIES;
+        showToast('Loaded Kanto fallback. Check connection for full dex.');
+      }
+      buildAliasIndex();
+      loadingState.style.display = 'none';
+      bootRender();
     }
 
-    function getOwnedPokemon() {
-      return pokemon.filter(p => !!state.owned[p.dex]);
+    function bootRender() {
+      renderPlayerSelect();
+      renderGenerationFilter();
+      $('commandPrefixInput').value = state.commandPrefix || '@Pokétwo#8236';
+      renderAll();
     }
 
-    function getMissingPokemon() {
-      return pokemon.filter(p => !state.owned[p.dex]);
+    function renderAll() {
+      renderStats();
+      renderTarget();
+      renderSpeciesGrid();
+      renderCommandTargets();
+      renderRegionGrid();
+      renderCustomForms();
+      renderSaveInfo();
+      savePassiveSettings();
     }
 
-    function updateSummary() {
-      const ownedCount = getOwnedPokemon().length;
-      const total = pokemon.length;
-      const missingCount = total - ownedCount;
-      const percentNumber = total ? (ownedCount / total) * 100 : 0;
-      const percent = percentNumber.toFixed(1);
-
-      ownedCountEl.textContent = ownedCount;
-      missingCountEl.textContent = missingCount;
-      percentCompleteEl.textContent = `${percent}%`;
-      completionSubEl.textContent = `${ownedCount} of ${total}`;
-      progressBarEl.style.width = `${percentNumber}%`;
-      const dashOffset = RING_CIRCUMFERENCE - (RING_CIRCUMFERENCE * percentNumber / 100);
-      progressRingMeterEl.style.strokeDashoffset = String(dashOffset);
-      ringValueEl.innerHTML = `${Math.round(percentNumber)}%<span>complete</span>`;
-      lastSavedEl.textContent = state.lastSaved ? new Date(state.lastSaved).toLocaleString() : 'Not yet';
-
-      updateTarget();
-      updateHeroSprites();
+    function savePassiveSettings() {
+      localStorage.setItem(LEGACY_SETTINGS_KEY, JSON.stringify({
+        poketwoTool: true,
+        activePlayer: state.currentPlayerId,
+        search: $('searchInput').value,
+        generation: $('generationFilter').value,
+        status: $('statusFilter').value,
+        sort: $('sortMode').value
+      }));
     }
 
-    function getFilteredPokemon() {
-      const query = searchInput.value.trim().toLowerCase();
-      const status = statusFilter.value;
-      const sort = sortMode.value;
-
-      let items = pokemon.filter(p => {
-        const owned = !!state.owned[p.dex];
-        const matchesQuery = !query || p.name.toLowerCase().includes(query) || formatDex(p.dex).includes(query) || String(p.dex) === query;
-        const matchesStatus = status === 'all' || (status === 'owned' && owned) || (status === 'missing' && !owned);
-        return matchesQuery && matchesStatus;
+    function renderPlayerSelect() {
+      $('playerSelect').innerHTML = '';
+      state.players.forEach(player => {
+        const option = document.createElement('option');
+        option.value = player.id;
+        option.textContent = player.name;
+        $('playerSelect').appendChild(option);
       });
+      $('playerSelect').value = currentPlayer().id;
+      $('renamePlayerInput').value = currentPlayer().name;
+    }
 
+    function renderGenerationFilter() {
+      $('generationFilter').innerHTML = '';
+      GENERATIONS.forEach(gen => {
+        const option = document.createElement('option');
+        option.value = gen.id;
+        option.textContent = gen.name;
+        $('generationFilter').appendChild(option);
+      });
+    }
+
+    function renderStats() {
+      const player = currentPlayer();
+      const total = species.length || 151;
+      const caught = species.filter(item => player.caught[item.dex]).length;
+      const shiny = species.filter(item => player.shiny[item.dex]).length;
+      const wishlist = species.filter(item => player.wishlist[item.dex]).length;
+      const missing = Math.max(total - caught, 0);
+      const percent = total ? (caught / total) * 100 : 0;
+      $('caughtCount').textContent = caught;
+      $('caughtSub').textContent = `${percent.toFixed(1)}% of ${total}`;
+      $('missingCount').textContent = missing;
+      $('shinyCount').textContent = shiny;
+      $('wishlistCount').textContent = wishlist;
+      $('caughtProgress').style.width = `${percent}%`;
+      $('savedAt').textContent = state.updatedAt ? new Date(state.updatedAt).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }) : 'Ready';
+    }
+
+    function renderTarget() {
+      const player = currentPlayer();
+      const target = species.find(item => item.dex === player.huntDex)
+        || species.find(item => player.caught[item.dex] && !player.shiny[item.dex])
+        || species.find(item => !player.caught[item.dex])
+        || species[0];
+      if (!target) return;
+      player.huntDex = target.dex;
+      $('targetName').textContent = target.name;
+      $('targetMeta').textContent = `#${formatDex(target.dex)} · ${generationForDex(target.dex).name} · ${player.shiny[target.dex] ? 'shiny caught' : 'hunt ready'}`;
+      $('targetSprite').alt = `${target.name} sprite`;
+      setSprite($('targetSprite'), target.dex, true);
+      activeCommand = buildCommand('hunt', target);
+      $('commandOutput').textContent = activeCommand;
+      $('quickCommandOutput').textContent = [
+        buildCommand('hunt', target),
+        buildCommand('marketShiny', target),
+        buildCommand('inventoryShiny', target)
+      ].join('\n');
+    }
+
+    function filteredSpecies() {
+      const player = currentPlayer();
+      const query = normalizeText($('searchInput').value);
+      const gen = GENERATIONS.find(item => item.id === $('generationFilter').value) || GENERATIONS[0];
+      const status = $('statusFilter').value;
+      const sort = $('sortMode').value;
+      let items = species.filter(item => {
+        const caught = !!player.caught[item.dex];
+        const shiny = !!player.shiny[item.dex];
+        const wishlist = !!player.wishlist[item.dex];
+        const hunt = player.huntDex === item.dex;
+        const inGeneration = item.dex >= gen.min && item.dex <= gen.max;
+        const matchesQuery = !query || normalizeText(item.name).includes(query) || normalizeText(item.apiName).includes(query) || String(item.dex) === query || formatDex(item.dex).includes(query);
+        const matchesStatus =
+          status === 'all' ||
+          (status === 'caught' && caught) ||
+          (status === 'missing' && !caught) ||
+          (status === 'shiny' && shiny) ||
+          (status === 'notShiny' && caught && !shiny) ||
+          (status === 'wishlist' && wishlist) ||
+          (status === 'hunt' && hunt);
+        return inGeneration && matchesQuery && matchesStatus;
+      });
       items = [...items].sort((a, b) => {
         if (sort === 'name') return a.name.localeCompare(b.name);
-        if (sort === 'ownedFirst') {
-          const diff = Number(state.owned[b.dex]) - Number(state.owned[a.dex]);
-          return diff || a.dex - b.dex;
-        }
-        if (sort === 'missingFirst') {
-          const diff = Number(state.owned[a.dex]) - Number(state.owned[b.dex]);
-          return diff || a.dex - b.dex;
-        }
+        if (sort === 'caughtFirst') return Number(!!player.caught[b.dex]) - Number(!!player.caught[a.dex]) || a.dex - b.dex;
+        if (sort === 'missingFirst') return Number(!!player.caught[a.dex]) - Number(!!player.caught[b.dex]) || a.dex - b.dex;
+        if (sort === 'shinyFirst') return Number(!!player.shiny[b.dex]) - Number(!!player.shiny[a.dex]) || a.dex - b.dex;
+        if (sort === 'wishlistFirst') return Number(!!player.wishlist[b.dex]) - Number(!!player.wishlist[a.dex]) || a.dex - b.dex;
         return a.dex - b.dex;
       });
-
       return items;
     }
 
-    function renderList() {
-      const items = getFilteredPokemon();
-      listEl.innerHTML = '';
-      visibleCountEl.textContent = items.length;
-
+    function renderSpeciesGrid() {
+      const player = currentPlayer();
+      const items = filteredSpecies();
+      speciesGrid.innerHTML = '';
       if (!items.length) {
-        const empty = document.createElement('div');
-        empty.className = 'empty-state';
-        empty.textContent = 'No Pokémon match that search/filter combo.';
-        listEl.appendChild(empty);
+        speciesGrid.innerHTML = '<div class="empty-state">No species match this view.</div>';
         return;
       }
+      const fragment = document.createDocumentFragment();
+      items.forEach(item => {
+        const caught = !!player.caught[item.dex];
+        const shiny = !!player.shiny[item.dex];
+        const wishlist = !!player.wishlist[item.dex];
+        const card = document.createElement('article');
+        card.className = `species-card ${caught ? 'caught' : ''} ${shiny ? 'shiny' : ''}`;
+        card.dataset.dex = String(item.dex);
+        const img = document.createElement('img');
+        img.alt = `${item.name} sprite`;
+        setSprite(img, item.dex, shiny);
+        card.innerHTML = `
+          <div class="sprite-box"></div>
+          <div>
+            <div class="dex">#${formatDex(item.dex)} · ${generationForDex(item.dex).name}</div>
+            <div class="species-name">${item.name}${shiny ? ' ✦' : ''}</div>
+            <div class="species-meta">${caught ? 'Caught' : 'Missing'} · ${shiny ? 'Shiny confirmed' : 'No shiny logged'}${wishlist ? ' · Wishlist' : ''}</div>
+            <div class="card-checks">
+              <label class="check-pill"><input type="checkbox" data-field="caught" ${caught ? 'checked' : ''}>Caught</label>
+              <label class="check-pill"><input type="checkbox" data-field="shiny" ${shiny ? 'checked' : ''}>Shiny</label>
+              <label class="check-pill"><input type="checkbox" data-field="wishlist" ${wishlist ? 'checked' : ''}>Wish</label>
+            </div>
+            <div class="card-actions">
+              <button class="mini-btn" type="button" data-card-action="hunt">Hunt</button>
+              <button class="mini-btn" type="button" data-card-action="market">Market</button>
+              <button class="mini-btn" type="button" data-card-action="copy">Copy</button>
+            </div>
+            <input class="note-input" data-note="true" value="${escapeAttr(player.notes[item.dex] || '')}" placeholder="Note / price / owner" />
+          </div>
+        `;
+        card.querySelector('.sprite-box').appendChild(img);
+        fragment.appendChild(card);
+      });
+      speciesGrid.appendChild(fragment);
+    }
 
-      items.forEach(p => {
-        const owned = !!state.owned[p.dex];
-        const card = document.createElement('label');
-        card.className = `card ${owned ? 'owned' : ''}`;
-        card.dataset.dex = String(p.dex);
+    function renderCommandTargets() {
+      const select = $('commandTargetSelect');
+      const selected = select.value || String(currentPlayer().huntDex || species[0]?.dex || 1);
+      select.innerHTML = '';
+      species.forEach(item => {
+        const option = document.createElement('option');
+        option.value = String(item.dex);
+        option.textContent = `#${formatDex(item.dex)} ${item.name}`;
+        select.appendChild(option);
+      });
+      select.value = species.some(item => String(item.dex) === selected) ? selected : String(currentPlayer().huntDex || species[0]?.dex || 1);
+    }
 
-        const checkbox = document.createElement('input');
-        checkbox.type = 'checkbox';
-        checkbox.className = 'checkbox';
-        checkbox.checked = owned;
-        checkbox.setAttribute('aria-label', `Mark ${p.name} as ${owned ? 'missing' : 'owned'}`);
-        checkbox.addEventListener('change', () => {
-          state.owned[p.dex] = checkbox.checked;
-          saveState();
-          renderList();
-        });
+    function renderRegionGrid() {
+      const player = currentPlayer();
+      const rows = GENERATIONS.filter(gen => gen.id !== 'all').map(gen => {
+        const regionSpecies = species.filter(item => item.dex >= gen.min && item.dex <= gen.max);
+        if (!regionSpecies.length) return '';
+        const caught = regionSpecies.filter(item => player.caught[item.dex]).length;
+        const percent = regionSpecies.length ? (caught / regionSpecies.length) * 100 : 0;
+        return `
+          <div class="region-row">
+            <span>${gen.name}</span>
+            <div class="region-meter"><span style="width:${percent}%"></span></div>
+            <span>${caught}/${regionSpecies.length}</span>
+          </div>
+        `;
+      }).join('');
+      $('regionGrid').innerHTML = rows;
+    }
 
-        const artShell = document.createElement('div');
-        artShell.className = 'art-shell';
-        artShell.appendChild(createSprite(p.dex, p.name));
-
-        const nameWrap = document.createElement('div');
-        nameWrap.className = 'name-wrap';
-
-        const dex = document.createElement('div');
-        dex.className = 'dex';
-        dex.textContent = `#${formatDex(p.dex)}`;
-
-        const nameRow = document.createElement('div');
-        nameRow.className = 'name-row';
-
-        const name = document.createElement('div');
-        name.className = 'name';
-        name.textContent = p.name;
-
-        const sparkle = document.createElement('span');
-        sparkle.className = 'sparkle';
-        sparkle.textContent = '✦';
-
-        const meta = document.createElement('div');
-        meta.className = 'meta';
-        meta.textContent = owned ? 'Owned shiny · saved locally' : 'Still missing · tap to check off';
-
-        nameRow.appendChild(name);
-        nameRow.appendChild(sparkle);
-        nameWrap.appendChild(dex);
-        nameWrap.appendChild(nameRow);
-        nameWrap.appendChild(meta);
-
-        const badge = document.createElement('div');
-        badge.className = `badge ${owned ? 'owned' : 'missing'}`;
-        badge.textContent = owned ? 'Owned' : 'Missing';
-
-        card.addEventListener('pointermove', (event) => {
-          if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-          const rect = card.getBoundingClientRect();
-          const x = event.clientX - rect.left;
-          const y = event.clientY - rect.top;
-          const rotateY = ((x / rect.width) - 0.5) * 5;
-          const rotateX = -((y / rect.height) - 0.5) * 5;
-          card.style.setProperty('--tilt-x', `${rotateX}deg`);
-          card.style.setProperty('--tilt-y', `${rotateY}deg`);
-          card.style.setProperty('--shine-x', `${(x / rect.width) * 100}%`);
-          card.style.setProperty('--shine-y', `${(y / rect.height) * 100}%`);
-        });
-
-        card.addEventListener('pointerleave', () => {
-          card.style.setProperty('--tilt-x', '0deg');
-          card.style.setProperty('--tilt-y', '0deg');
-        });
-
-        card.appendChild(checkbox);
-        card.appendChild(artShell);
-        card.appendChild(nameWrap);
-        card.appendChild(badge);
-        listEl.appendChild(card);
+    function renderCustomForms() {
+      const player = currentPlayer();
+      const list = $('customList');
+      list.innerHTML = '';
+      if (!player.customForms.length) {
+        list.innerHTML = '<div class="empty-state">No custom event forms yet.</div>';
+        return;
+      }
+      player.customForms.forEach(form => {
+        const card = document.createElement('div');
+        card.className = 'custom-card';
+        card.dataset.customId = form.id;
+        card.innerHTML = `
+          <strong>${escapeHtml(form.name)}</strong>
+          <div class="species-meta">${escapeHtml(form.base || 'Custom Pokétwo entry')}</div>
+          <div class="two-col">
+            <label class="check-pill"><input type="checkbox" data-custom-field="owned" ${form.owned ? 'checked' : ''}>Owned</label>
+            <label class="check-pill"><input type="checkbox" data-custom-field="shiny" ${form.shiny ? 'checked' : ''}>Shiny</label>
+          </div>
+          <input class="note-input" data-custom-note="true" value="${escapeAttr(form.note || '')}" placeholder="Note / value / owner" />
+          <button type="button" class="danger-btn" data-custom-delete="true">Remove</button>
+        `;
+        list.appendChild(card);
       });
     }
 
-    function updateTarget() {
-      const missing = getMissingPokemon();
-      const target = missing.find(p => p.dex === activeTargetDex) || missing[0] || pokemon[pokemon.length - 1];
-      activeTargetDex = target?.dex || null;
-
-      if (!target) {
-        targetNameEl.textContent = 'Full set complete';
-        targetMetaEl.textContent = 'Every Kanto shiny is checked off.';
-        return;
-      }
-
-      targetNameEl.textContent = target.name;
-      targetMetaEl.textContent = missing.length ? `#${formatDex(target.dex)} · ${missing.length} missing remaining` : 'Every Kanto shiny is checked off.';
-      setSprite(targetSpriteEl, target.dex);
-      saveSettings();
+    function renderSaveInfo() {
+      const player = currentPlayer();
+      const saved = state.updatedAt ? new Date(state.updatedAt).toLocaleString() : 'Not saved yet';
+      $('saveInfo').textContent = [
+        `Active player: ${player.name}`,
+        `Profiles: ${state.players.map(item => item.name).join(', ')}`,
+        `Storage key: ${APP_KEY}`,
+        `Last saved: ${saved}`,
+        `Custom forms: ${player.customForms.length}`
+      ].join('\n');
     }
 
-    function updateHeroSprites() {
-      const owned = getOwnedPokemon();
-      const missing = getMissingPokemon();
-      const featured = owned[owned.length - 1] || pokemon[24] || pokemon[0];
-      if (featured) {
-        featuredSpriteEl.alt = `${featured.name} shiny artwork`;
-        setSprite(featuredSpriteEl, featured.dex);
-      }
+    function buildCommand(type, item) {
+      const prefix = state.commandPrefix || '@Pokétwo#8236';
+      const name = item?.name || 'Pikachu';
+      if (type === 'hunt') return `${prefix} shinyhunt ${name}`;
+      if (type === 'marketShiny') return `${prefix} market search --name ${name} --shiny --order price`;
+      if (type === 'marketNormal') return `${prefix} market search --name ${name} --order price`;
+      if (type === 'inventory') return `${prefix} pokemon --name ${name}`;
+      if (type === 'inventoryShiny') return `${prefix} pokemon --name ${name} --shiny`;
+      if (type === 'dexMissing') return `${prefix} pokedex --uncaught`;
+      return `${prefix} pokemon --name ${name}`;
+    }
 
-      const cloudPool = [...owned.slice(-4), ...missing.slice(0, 4)];
-      const unique = [];
-      cloudPool.forEach(p => {
-        if (p && !unique.some(item => item.dex === p.dex)) unique.push(p);
+    function parseSpeciesText(text) {
+      const lines = String(text || '').split(/\r?\n/);
+      const found = new Map();
+      const unmatched = [];
+      lines.forEach(line => {
+        const normalized = ` ${normalizeText(line)} `;
+        if (!normalized.trim()) return;
+        const match = aliasIndex.find(entry => normalized.includes(` ${entry.alias} `));
+        if (match) {
+          const shiny = /✨|shiny/i.test(line);
+          found.set(match.dex, { dex: match.dex, shiny: shiny || found.get(match.dex)?.shiny });
+        } else if (line.trim()) {
+          unmatched.push(line.trim());
+        }
       });
-      const finalPool = unique.slice(0, 6);
-      spriteCloudEl.innerHTML = '';
-      finalPool.forEach(p => {
-        spriteCloudEl.appendChild(createSprite(p.dex, p.name, ''));
+      return { found: [...found.values()], unmatched };
+    }
+
+    function applyPaste() {
+      const player = currentPlayer();
+      const mode = $('pasteMode').value;
+      const parsed = parseSpeciesText($('pasteInput').value);
+      if (mode === 'caught-replace') {
+        player.caught = {};
+        player.shiny = {};
+      }
+      parsed.found.forEach(entry => {
+        if (mode === 'wishlist-add') {
+          player.wishlist[entry.dex] = true;
+          return;
+        }
+        if (mode === 'wishlist-remove') {
+          delete player.wishlist[entry.dex];
+          return;
+        }
+        player.caught[entry.dex] = true;
+        if (mode === 'shiny-add' || entry.shiny) player.shiny[entry.dex] = true;
       });
+      saveAppState();
+      renderAll();
+      $('pasteResult').textContent = [
+        `Matched species: ${parsed.found.length}`,
+        `Unmatched lines: ${parsed.unmatched.length}`,
+        parsed.unmatched.slice(0, 12).join('\n')
+      ].filter(Boolean).join('\n');
+      showToast('Paste applied.');
+    }
+
+    function setPokemonField(dex, field, value) {
+      const player = currentPlayer();
+      if (value) {
+        player[field][dex] = true;
+        if (field === 'shiny') player.caught[dex] = true;
+      } else {
+        delete player[field][dex];
+        if (field === 'caught') delete player.shiny[dex];
+      }
+      saveAppState();
+      renderAll();
+    }
+
+    function copyText(text, message = 'Copied.') {
+      const fallback = () => {
+        const area = document.createElement('textarea');
+        area.value = text;
+        area.style.position = 'fixed';
+        area.style.left = '-9999px';
+        document.body.appendChild(area);
+        area.select();
+        document.execCommand('copy');
+        area.remove();
+      };
+      if (navigator.clipboard?.writeText) {
+        navigator.clipboard.writeText(text).then(() => showToast(message)).catch(() => {
+          fallback();
+          showToast(message);
+        });
+      } else {
+        fallback();
+        showToast(message);
+      }
+    }
+
+    function listText(kind) {
+      const player = currentPlayer();
+      let items = [];
+      if (kind === 'missing') items = species.filter(item => !player.caught[item.dex]);
+      if (kind === 'wishlist') items = species.filter(item => player.wishlist[item.dex]);
+      if (kind === 'notShiny') items = species.filter(item => player.caught[item.dex] && !player.shiny[item.dex]);
+      return items.map(item => `#${formatDex(item.dex)} ${item.name}`).join('\n') || 'Nothing to list.';
+    }
+
+    function nextHuntCommands() {
+      const player = currentPlayer();
+      return species
+        .filter(item => player.caught[item.dex] && !player.shiny[item.dex])
+        .slice(0, 10)
+        .map(item => buildCommand('hunt', item))
+        .join('\n') || buildCommand('dexMissing');
+    }
+
+    function escapeHtml(value) {
+      return String(value).replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[char]));
+    }
+
+    function escapeAttr(value) {
+      return escapeHtml(value).replace(/\n/g, ' ');
     }
 
     function showToast(message) {
@@ -1451,127 +1560,228 @@
       toastTimer = setTimeout(() => toastEl.classList.remove('show'), 1800);
     }
 
-    function rollRandomMissing() {
-      const missing = getMissingPokemon();
-      if (!missing.length) {
-        showToast('Full Kanto shiny set complete!');
-        return;
-      }
-      const target = missing[Math.floor(Math.random() * missing.length)];
-      activeTargetDex = target.dex;
-      statusFilter.value = 'all';
-      searchInput.value = '';
-      saveSettings();
-      renderList();
-      updateTarget();
-      const card = listEl.querySelector(`[data-dex="${target.dex}"]`);
-      if (card) {
-        card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        card.classList.add('highlight');
-        setTimeout(() => card.classList.remove('highlight'), 3600);
-      }
-    }
-
-    async function copyMissingList() {
-      const missing = getMissingPokemon();
-      const text = missing.length
-        ? missing.map(p => `#${formatDex(p.dex)} ${p.name}`).join('\n')
-        : 'All 151 Kanto shinies are checked off.';
-
-      try {
-        if (navigator.clipboard?.writeText) {
-          await navigator.clipboard.writeText(text);
-        } else {
-          const area = document.createElement('textarea');
-          area.value = text;
-          area.style.position = 'fixed';
-          area.style.left = '-9999px';
-          document.body.appendChild(area);
-          area.select();
-          document.execCommand('copy');
-          area.remove();
-        }
-        showToast('Missing list copied.');
-      } catch (err) {
-        showToast('Copy failed, export still works.');
-      }
-    }
-
-    function handleFilterChange() {
-      saveSettings();
-      renderList();
-    }
-
-    searchInput.addEventListener('input', handleFilterChange);
-    statusFilter.addEventListener('change', handleFilterChange);
-    sortMode.addEventListener('change', handleFilterChange);
-    randomMissingBtn.addEventListener('click', rollRandomMissing);
-    copyMissingBtn.addEventListener('click', copyMissingList);
-
-    exportBtn.addEventListener('click', () => {
-      const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'kanto-shiny-checklist-save.json';
-      a.click();
-      URL.revokeObjectURL(url);
-      showToast('Save exported.');
+    document.querySelectorAll('.tab-btn').forEach(button => {
+      button.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(item => item.classList.toggle('active', item === button));
+        document.querySelectorAll('.view').forEach(view => view.classList.toggle('active', view.id === button.dataset.view));
+      });
     });
 
-    importBtn.addEventListener('click', () => importFileInput.click());
+    $('playerSelect').addEventListener('change', () => {
+      state.currentPlayerId = $('playerSelect').value;
+      renderAll();
+      saveAppState();
+    });
 
-    importFileInput.addEventListener('change', async (event) => {
+    $('addPlayerBtn').addEventListener('click', () => {
+      const name = prompt('Player name?');
+      if (!name) return;
+      const id = makeId('player');
+      state.players.push(makePlayer(id, name.trim()));
+      state.currentPlayerId = id;
+      renderPlayerSelect();
+      saveAppState();
+      renderAll();
+    });
+
+    ['searchInput', 'generationFilter', 'statusFilter', 'sortMode'].forEach(id => {
+      $(id).addEventListener('input', renderAll);
+      $(id).addEventListener('change', renderAll);
+    });
+
+    speciesGrid.addEventListener('change', event => {
+      const card = event.target.closest('.species-card');
+      if (!card) return;
+      const dex = card.dataset.dex;
+      const field = event.target.dataset.field;
+      if (field) setPokemonField(dex, field, event.target.checked);
+      if (event.target.dataset.note) {
+        currentPlayer().notes[dex] = event.target.value;
+        saveAppState();
+      }
+    });
+
+    speciesGrid.addEventListener('input', event => {
+      const card = event.target.closest('.species-card');
+      if (card && event.target.dataset.note) {
+        currentPlayer().notes[card.dataset.dex] = event.target.value;
+        saveAppState();
+      }
+    });
+
+    speciesGrid.addEventListener('click', event => {
+      const button = event.target.closest('button[data-card-action]');
+      if (!button) return;
+      const card = button.closest('.species-card');
+      const item = species.find(entry => entry.dex === Number(card.dataset.dex));
+      if (!item) return;
+      const player = currentPlayer();
+      if (button.dataset.cardAction === 'hunt') {
+        player.huntDex = item.dex;
+        saveAppState();
+        renderAll();
+        showToast(`${item.name} set as hunt.`);
+      }
+      if (button.dataset.cardAction === 'market') {
+        activeCommand = buildCommand('marketShiny', item);
+        $('commandOutput').textContent = activeCommand;
+        copyText(activeCommand, 'Market command copied.');
+      }
+      if (button.dataset.cardAction === 'copy') {
+        activeCommand = buildCommand('inventory', item);
+        $('commandOutput').textContent = activeCommand;
+        copyText(activeCommand, 'Inventory command copied.');
+      }
+    });
+
+    document.querySelectorAll('[data-command]').forEach(button => {
+      button.addEventListener('click', () => {
+        const item = species.find(entry => entry.dex === Number($('commandTargetSelect').value)) || species[0];
+        activeCommand = buildCommand(button.dataset.command, item);
+        $('commandOutput').textContent = activeCommand;
+      });
+    });
+
+    $('commandTargetSelect').addEventListener('change', () => {
+      const item = species.find(entry => entry.dex === Number($('commandTargetSelect').value)) || species[0];
+      activeCommand = buildCommand('inventory', item);
+      $('commandOutput').textContent = activeCommand;
+    });
+
+    $('copyCommandBtn').addEventListener('click', () => copyText(activeCommand || $('commandOutput').textContent, 'Command copied.'));
+    $('copyCommandOutputBtn').addEventListener('click', () => copyText($('quickCommandOutput').textContent, 'Commands copied.'));
+    $('copyMissingBtn').addEventListener('click', () => copyText(listText('missing'), 'Missing list copied.'));
+    $('copyWishlistBtn').addEventListener('click', () => copyText(listText('wishlist'), 'Wishlist copied.'));
+    $('copyShinyMissingBtn').addEventListener('click', () => copyText(listText('notShiny'), 'Non-shiny caught list copied.'));
+    $('copyNextHuntsBtn').addEventListener('click', () => copyText(nextHuntCommands(), 'Hunt commands copied.'));
+    $('copyHuntBtn').addEventListener('click', () => copyText(buildCommand('hunt', species.find(item => item.dex === currentPlayer().huntDex)), 'Hunt command copied.'));
+
+    $('rollTargetBtn').addEventListener('click', () => {
+      const player = currentPlayer();
+      const pool = species.filter(item => player.caught[item.dex] && !player.shiny[item.dex]);
+      const fallbackPool = species.filter(item => !player.caught[item.dex]);
+      const targetPool = pool.length ? pool : fallbackPool;
+      if (!targetPool.length) return showToast('Everything is tracked.');
+      const target = targetPool[Math.floor(Math.random() * targetPool.length)];
+      player.huntDex = target.dex;
+      saveAppState();
+      renderAll();
+      showToast(`${target.name} is the new hunt.`);
+    });
+
+    $('applyPasteBtn').addEventListener('click', applyPaste);
+    $('savePrefixBtn').addEventListener('click', () => {
+      state.commandPrefix = $('commandPrefixInput').value.trim() || '@Pokétwo#8236';
+      saveAppState();
+      renderAll();
+      showToast('Prefix saved.');
+    });
+
+    $('addCustomBtn').addEventListener('click', () => {
+      const name = $('customNameInput').value.trim();
+      if (!name) return;
+      currentPlayer().customForms.push({
+        id: makeId('custom'),
+        name,
+        base: $('customBaseInput').value.trim(),
+        owned: false,
+        shiny: false,
+        note: ''
+      });
+      $('customNameInput').value = '';
+      $('customBaseInput').value = '';
+      saveAppState();
+      renderCustomForms();
+      renderStats();
+    });
+
+    $('customList').addEventListener('change', event => {
+      const card = event.target.closest('[data-custom-id]');
+      if (!card) return;
+      const form = currentPlayer().customForms.find(item => item.id === card.dataset.customId);
+      if (!form) return;
+      if (event.target.dataset.customField) form[event.target.dataset.customField] = event.target.checked;
+      if (event.target.dataset.customNote) form.note = event.target.value;
+      saveAppState();
+      renderCustomForms();
+    });
+
+    $('customList').addEventListener('input', event => {
+      const card = event.target.closest('[data-custom-id]');
+      const form = currentPlayer().customForms.find(item => item.id === card?.dataset.customId);
+      if (form && event.target.dataset.customNote) {
+        form.note = event.target.value;
+        saveAppState();
+      }
+    });
+
+    $('customList').addEventListener('click', event => {
+      const card = event.target.closest('[data-custom-id]');
+      if (!card || !event.target.dataset.customDelete) return;
+      currentPlayer().customForms = currentPlayer().customForms.filter(item => item.id !== card.dataset.customId);
+      saveAppState();
+      renderCustomForms();
+    });
+
+    $('renamePlayerBtn').addEventListener('click', () => {
+      const name = $('renamePlayerInput').value.trim();
+      if (!name) return;
+      currentPlayer().name = name;
+      renderPlayerSelect();
+      saveAppState();
+      renderAll();
+    });
+
+    $('resetPlayerBtn').addEventListener('click', () => {
+      if (!confirm(`Reset ${currentPlayer().name}'s tracker?`)) return;
+      const player = currentPlayer();
+      const fresh = makePlayer(player.id, player.name);
+      Object.assign(player, fresh);
+      saveAppState();
+      renderAll();
+    });
+
+    $('exportBtn').addEventListener('click', () => {
+      const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const anchor = document.createElement('a');
+      anchor.href = url;
+      anchor.download = 'poketwo-collection-command-center-backup.json';
+      anchor.click();
+      URL.revokeObjectURL(url);
+      showToast('Backup exported.');
+    });
+
+    $('importBtn').addEventListener('click', () => $('importFileInput').click());
+    $('importFileInput').addEventListener('change', async event => {
       const file = event.target.files?.[0];
       if (!file) return;
       try {
-        const text = await file.text();
-        const parsed = JSON.parse(text);
-        const fallback = buildDefaultState();
-        state = {
-          owned: { ...fallback.owned, ...(parsed.owned || {}) },
-          lastSaved: new Date().toISOString()
-        };
-        saveState();
-        renderList();
-        showToast('Save imported.');
+        const parsed = JSON.parse(await file.text());
+        if (parsed.players) {
+          state = { ...defaultAppState(), ...parsed };
+        } else if (parsed.owned) {
+          Object.entries(parsed.owned).forEach(([dex, value]) => {
+            if (value) {
+              currentPlayer().caught[dex] = true;
+              currentPlayer().shiny[dex] = true;
+            }
+          });
+        } else {
+          throw new Error('Unknown backup shape');
+        }
+        saveAppState();
+        renderPlayerSelect();
+        renderAll();
+        showToast('Backup imported.');
       } catch (err) {
-        alert('That save file could not be imported.');
+        alert('That backup could not be imported.');
       } finally {
-        importFileInput.value = '';
+        $('importFileInput').value = '';
       }
     });
 
-    resetDefaultsBtn.addEventListener('click', () => {
-      const ok = confirm('Reset the checklist to your current uploaded inventory? This will overwrite your current saved progress.');
-      if (!ok) return;
-      state = buildDefaultState();
-      saveState();
-      renderList();
-      showToast('Reset to current inventory.');
-    });
-
-    clearAllBtn.addEventListener('click', () => {
-      const ok = confirm('Clear every checkmark and start from zero? This will overwrite your current saved progress.');
-      if (!ok) return;
-      const empty = {};
-      pokemon.forEach(p => { empty[p.dex] = false; });
-      state = { owned: empty, lastSaved: null };
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-      saveStatusEl.textContent = 'Cleared';
-      updateSummary();
-      renderList();
-      showToast('Checklist cleared.');
-    });
-
-    searchInput.value = settings.search || '';
-    statusFilter.value = settings.status || 'all';
-    sortMode.value = settings.sort || 'dex';
-    defaultOwnedCountEl.textContent = defaultOwnedDex.size;
-    progressRingMeterEl.style.strokeDasharray = String(RING_CIRCUMFERENCE);
-    progressRingMeterEl.style.strokeDashoffset = String(RING_CIRCUMFERENCE);
-    updateSummary();
-    renderList();
+    loadSpecies();
   </script>
 </body>
 </html>
